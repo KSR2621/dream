@@ -25,9 +25,11 @@
             background: linear-gradient(90deg, #34495e 0%, #2c3e50 100%);
             padding: 15px 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 0;
+            transition: transform 0.3s ease;
             z-index: 1000;
+        }
+        nav.hidden {
+            transform: translateY(-100%);
         }
         .nav-logo {
             font-size: 1.5rem;
@@ -47,11 +49,15 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 1rem;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 5px;
             transition: all 0.3s ease;
             width: 100%;
             text-align: center;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .nav-links a:hover, .nav-links a:active {
             background-color: #1abc9c;
@@ -75,6 +81,7 @@
             transition: all 0.3s ease;
             width: 100%;
             max-width: 200px;
+            min-height: 44px;
         }
         .auth-buttons button:hover, .auth-buttons button:active {
             background: linear-gradient(90deg, #c0392b, #e74c3c);
@@ -120,6 +127,8 @@
             border: none;
             transition: all 0.3s ease;
             display: inline-block;
+            min-height: 44px;
+            min-width: 150px;
         }
         .edit-profile-btn:hover, .edit-profile-btn:active {
             background: linear-gradient(90deg, #16a085, #1abc9c);
@@ -222,6 +231,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             flex: 1;
+            min-height: 44px;
         }
         .delete-project {
             background: linear-gradient(90deg, #e74c3c, #c0392b);
@@ -273,6 +283,7 @@
             font-weight: 600;
             transition: all 0.3s ease;
             flex: 1;
+            min-height: 44px;
         }
         .project-done {
             background: linear-gradient(90deg, #2ecc71, #27ae60);
@@ -360,6 +371,7 @@
             .nav-links a {
                 font-size: 1.1rem;
                 width: auto;
+                min-height: auto;
             }
             .auth-buttons {
                 width: auto;
@@ -369,6 +381,7 @@
                 max-width: none;
                 padding: 10px 20px;
                 font-size: 1rem;
+                min-height: auto;
             }
             .profile-container {
                 max-width: 900px;
@@ -382,6 +395,8 @@
             .edit-profile-btn {
                 padding: 10px 25px;
                 font-size: 1rem;
+                min-height: auto;
+                min-width: 180px;
             }
             h3 {
                 font-size: 1.8rem;
@@ -424,6 +439,7 @@
             .project-actions button {
                 padding: 8px 15px;
                 font-size: 0.9rem;
+                min-height: auto;
             }
             .project-item {
                 padding: 15px;
@@ -442,6 +458,7 @@
                 flex: none;
                 padding: 8px 15px;
                 font-size: 0.9rem;
+                min-height: auto;
             }
             .loading, .error {
                 padding: 20px;
@@ -449,51 +466,74 @@
             }
         }
 
-        @media (max-width: 480px) {
+        /* Mobile Styles (max-width: 768px) */
+        @media (max-width: 768px) {
+            nav {
+                padding: 10px 15px;
+            }
             .nav-logo {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+            .nav-links {
+                gap: 8px;
+                margin-bottom: 12px;
             }
             .nav-links a {
-                font-size: 0.9rem;
-                padding: 8px;
+                font-size: 0.95rem;
+                padding: 8px 15px;
             }
             .auth-buttons button {
-                padding: 8px;
+                padding: 8px 15px;
                 font-size: 0.9rem;
+                max-width: 180px;
             }
             .profile-container {
+                max-width: 95%;
+                margin: 15px auto;
                 padding: 15px;
             }
             h2 {
                 font-size: 1.8rem;
-                margin-bottom: 12px;
+                margin-bottom: 15px;
             }
             .edit-profile-btn {
                 padding: 8px 15px;
                 font-size: 0.9rem;
+                min-width: 130px;
             }
             h3 {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
                 margin-bottom: 8px;
             }
             h4 {
                 font-size: 1.2rem;
+                margin-bottom: 8px;
             }
             .section {
                 margin-bottom: 15px;
-                padding: 10px;
+                padding: 12px;
             }
             .subsection {
-                margin-bottom: 10px;
+                margin-bottom: 12px;
             }
             .info-item {
+                margin: 6px 0;
                 padding: 8px;
                 font-size: 0.9rem;
-                margin: 6px 0;
+                gap: 8px;
+            }
+            .info-item i {
+                font-size: 1rem;
             }
             .confirmation-status {
                 font-size: 0.85rem;
                 margin-top: 6px;
+                padding: 8px;
+            }
+            .card-container {
+                gap: 12px;
+                padding: 8px;
             }
             .card {
                 padding: 12px;
@@ -504,6 +544,10 @@
             }
             .card-content p {
                 font-size: 0.85rem;
+                margin: 6px 0;
+            }
+            .project-actions {
+                gap: 6px;
             }
             .project-actions button {
                 padding: 6px 10px;
@@ -511,19 +555,120 @@
             }
             .project-item {
                 padding: 10px;
+                margin-bottom: 8px;
                 font-size: 0.85rem;
                 gap: 8px;
             }
+            .project-item i {
+                margin-right: 6px;
+            }
+            .project-done, .project-remaining, .project-accept, .project-reject {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .loading, .error {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Smaller Mobile Styles (max-width: 480px) */
+        @media (max-width: 480px) {
+            nav {
+                padding: 8px 10px;
+            }
+            .nav-logo {
+                font-size: 1.2rem;
+                margin-bottom: 6px;
+            }
+            .nav-links {
+                gap: 6px;
+                margin-bottom: 10px;
+            }
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+            .auth-buttons button {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+                max-width: 160px;
+            }
+            .profile-container {
+                padding: 12px;
+            }
+            h2 {
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+            }
+            .edit-profile-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+                min-width: 120px;
+            }
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: 6px;
+            }
+            h4 {
+                font-size: 1.1rem;
+                margin-bottom: 6px;
+            }
+            .section {
+                margin-bottom: 12px;
+                padding: 10px;
+            }
+            .subsection {
+                margin-bottom: 10px;
+            }
+            .info-item {
+                padding: 6px;
+                font-size: 0.85rem;
+                margin: 4px 0;
+                gap: 6px;
+            }
+            .info-item i {
+                font-size: 0.9rem;
+            }
+            .confirmation-status {
+                font-size: 0.8rem;
+                margin-top: 4px;
+                padding: 6px;
+            }
+            .card {
+                padding: 10px;
+            }
+            .card-content h4 {
+                font-size: 1.2rem;
+                margin-bottom: 4px;
+            }
+            .card-content p {
+                font-size: 0.8rem;
+                margin: 4px 0;
+            }
+            .project-actions button {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .project-item {
+                padding: 8px;
+                font-size: 0.8rem;
+                gap: 6px;
+            }
+            .project-done, .project-remaining, .project-accept, .project-reject {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
             .loading, .error {
                 padding: 10px;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
         }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav>
+    <nav id="navbar">
         <div class="nav-logo">Student-Startup Connect</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
@@ -1139,6 +1284,23 @@
                     console.error('Error logging out:', error);
                     alert('Error logging out: ' + error.message);
                 }
+            });
+
+            // Scroll behavior for navigation bar
+            let lastScrollTop = 0;
+            const navbar = document.getElementById('navbar');
+
+            window.addEventListener('scroll', () => {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+                if (scrollTop > lastScrollTop) {
+                    // Scrolling down
+                    navbar.classList.add('hidden');
+                } else {
+                    // Scrolling up
+                    navbar.classList.remove('hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
             });
         } catch (error) {
             console.error('Error initializing Firebase:', error);
