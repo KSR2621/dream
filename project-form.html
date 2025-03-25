@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Submission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a2a44;
+            color: #ffffff;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: #2a3b5a;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #00c4b4;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #00c4b4;
+            border-radius: 5px;
+            background-color: #3a4b6a;
+            color: #ffffff;
+        }
+        input[readonly] {
+            background-color: #4a5b7a;
+            cursor: not-allowed;
+        }
+        button {
+            background-color: #00c4b4;
+            color: #1a2a44;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #00a89a;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Submit a New Project</h2>
+        <form id="projectForm">
+            <label for="projectTitle">Project Title</label>
+            <input type="text" id="projectTitle" name="projectTitle" placeholder="e.g., Data Analysis Project" required>
+
+            <label for="description">About the Project</label>
+            <textarea id="description" name="description" rows="4" placeholder="Describe the project (e.g., Analyze datasets to uncover trends...)" required></textarea>
+
+            <label for="category">Project Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select a category</option>
+                <option value="Data Analysis">Data Analysis</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Social Media Marketing">Social Media Marketing</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="level">Project Level</label>
+            <select id="level" name="level" required>
+                <option value="">Select a level</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+
+            <label for="skills">Skills Required</label>
+            <input type="text" id="skills" name="skills" placeholder="e.g., Python, Excel, SQL, Data Visualization" required>
+
+            <label for="duration">Duration</label>
+            <input type="text" id="duration" name="duration" placeholder="e.g., 4 months" required>
+
+            <label for="startup">Startup Name</label>
+            <input type="text" id="startup" name="startup" readonly required>
+
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" placeholder="e.g., Remote" required>
+
+            <label for="compensation">Compensation</label>
+            <input type="text" id="compensation" name="compensation" placeholder="e.g., Certificate & Stipend" required>
+
+            <label for="mentor">Mentor (Optional)</label>
+            <input type="text" id="mentor" name="mentor" placeholder="e.g., Experienced Web Developer">
+
+            <label for="responsibilities">Responsibilities (Optional)</label>
+            <textarea id="responsibilities" name="responsibilities" rows="3" placeholder="e.g., Develop responsive UI components, integrate backend APIs..."></textarea>
+
+            <label for="deliverables">Expected Deliverables</label>
+            <textarea id="deliverables" name="deliverables" rows="3" placeholder="e.g., A fully functional e-commerce website with payment integration" required></textarea>
+
+            <label for="openings">Number of Openings</label>
+            <input type="number" id="openings" name="openings" min="1" placeholder="e.g., 2" required>
+
+            <label for="startDate">Preferred Start Date</label>
+            <input type="date" id="startDate" name="startDate" required>
+
+            <label for="deadline">Application Deadline</label>
+            <input type="date" id="deadline" name="deadline" required>
+
+            <label for="timeCommitment">Time Commitment (Hours per Week)</label>
+            <input type="number" id="timeCommitment" name="timeCommitment" min="1" placeholder="e.g., 10" required>
+
+            <label for="eligibility">Eligibility Criteria (Optional)</label>
+            <textarea id="eligibility" name="eligibility" rows="3" placeholder="e.g., Must be a Computer Science student with at least 1 year of coding experience"></textarea>
+
+            <label for="applicationRequirements">Application Requirements</label>
+            <textarea id="applicationRequirements" name="applicationRequirements" rows="3" placeholder="e.g., Submit a resume and a link to your GitHub portfolio" required></textarea>
+
+            <label for="contact">Contact Information</label>
+            <input type="email" id="contact" name="contact" placeholder="e.g., contact@startup.com" required>
+
+            <label for="status">Project Status</label>
+            <select id="status" name="status" required>
+                <option value="Open">Open</option>
+                <option value="Closed">Closed</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+
+            <button type="submit">Submit Project</button>
+        </form>
+    </div>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, push, set, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                alert("Please log in to submit a project.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Get user details from localStorage
+            const userId = localStorage.getItem('userId');
+            const userType = localStorage.getItem('userType');
+
+            if (!userId || !userType || userType !== 'startup') {
+                alert("Only startups can submit projects. Please log in as a startup.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            console.log("Authenticated user:", { userId, userType });
+
+            // Fetch the startup's company name from Firebase
+            const userRef = ref(database, `users/${userId}`);
+            get(userRef).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    alert("User data not found. Please sign up again.");
+                    window.location.href = 'signup.html';
+                    return;
+                }
+
+                const userData = snapshot.val();
+                const companyName = userData.companyName || 'Unknown Startup';
+                console.log("Fetched company name:", companyName);
+
+                // Set the startup name in the form and make it read-only
+                const startupInput = document.getElementById('startup');
+                startupInput.value = companyName;
+            }).catch((error) => {
+                console.error("Error fetching user data:", error);
+                alert("Error fetching user data: " + error.message);
+            });
+
+            // Handle form submission
+            document.getElementById('projectForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Get form values
+                const projectTitle = document.getElementById('projectTitle').value;
+                const description = document.getElementById('description').value;
+                const category = document.getElementById('category').value;
+                const level = document.getElementById('level').value;
+                const skills = document.getElementById('skills').value;
+                const duration = document.getElementById('duration').value;
+                const startup = document.getElementById('startup').value;
+                const location = document.getElementById('location').value;
+                const compensation = document.getElementById('compensation').value;
+                const mentor = document.getElementById('mentor').value;
+                const responsibilities = document.getElementById('responsibilities').value;
+                const deliverables = document.getElementById('deliverables').value;
+                const openings = document.getElementById('openings').value;
+                const startDate = document.getElementById('startDate').value;
+                const deadline = document.getElementById('deadline').value;
+                const timeCommitment = document.getElementById('timeCommitment').value;
+                const eligibility = document.getElementById('eligibility').value;
+                const applicationRequirements = document.getElementById('applicationRequirements').value;
+                const contact = document.getElementById('contact').value;
+                const status = document.getElementById('status').value;
+
+                // Log the data to debug
+                console.log('Submitting project:', {
+                    projectTitle, description, category, level, skills, duration, startup, location,
+                    compensation, mentor, responsibilities, deliverables, openings, startDate,
+                    deadline, timeCommitment, eligibility, applicationRequirements, contact, status,
+                    postedBy: userId
+                });
+
+                try {
+                    // Save to Firebase
+                    const newProjectRef = ref(database, 'projects');
+                    const newProject = push(newProjectRef);
+                    await set(newProject, {
+                        projectTitle,
+                        description,
+                        category,
+                        level,
+                        skills,
+                        duration,
+                        startup,
+                        location,
+                        compensation,
+                        mentor,
+                        responsibilities,
+                        deliverables,
+                        openings,
+                        startDate,
+                        deadline,
+                        timeCommitment,
+                        eligibility,
+                        applicationRequirements,
+                        contact,
+                        status,
+                        confirmed: false, // Initially not confirmed
+                        postedBy: userId, // Add the userId of the startup
+                        timestamp: Date.now()
+                    });
+
+                    console.log('Project successfully saved to Firebase with key:', newProject.key);
+                    alert('Project submitted successfully! Awaiting host confirmation.');
+                    document.getElementById('projectForm').reset();
+                    // Reset the startup field after form reset
+                    document.getElementById('startup').value = startup;
+                    window.location.href = 'profile.html'; // Redirect to profile after submission
+                } catch (error) {
+                    console.error('Error submitting project:', error);
+                    alert('Error submitting project: ' + error.message);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

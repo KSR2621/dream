@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1e2a44;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #2a3b5a;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #1abc9c;
+        }
+        nav {
+            text-align: center;
+            padding: 15px;
+            background-color: #34495e;
+        }
+        nav a {
+            color: #1abc9c;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a3b5a;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            color: #1abc9c;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .student-details {
+            line-height: 1.6;
+        }
+        .student-details p {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #ccc;
+        }
+        .student-details p strong {
+            color: #fff;
+        }
+        .student-details a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+        .student-details a:hover {
+            text-decoration: underline;
+        }
+        .no-data {
+            color: #ccc;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: transparent;
+            color: #1abc9c;
+            text-decoration: none;
+            border: 1px solid #1abc9c;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .back-button:hover {
+            background-color: #1abc9c;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #2a3b5a;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Details</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="available-projects.html">Available Projects</a>
+        <a href="student-profile.html">Student Profile</a>
+        <a href="community.html">Community Forum</a>
+    </nav>
+
+    <div class="container">
+        <h2>Student Profile</h2>
+        <div class="student-details" id="studentDetails">
+            <p>Loading student details...</p>
+        </div>
+        <a href="available-students.html" class="back-button">Back to Available Students</a>
+    </div>
+
+    <footer>
+        <p>© 2024 Student-Startup Connect. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+
+        // Get the userId from the URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        if (!userId) {
+            document.getElementById('studentDetails').innerHTML = '<p class="no-data">No student ID provided.</p>';
+            throw new Error('No userId provided in the URL.');
+        }
+
+        // Fetch student details
+        const studentRef = ref(database, `students/${userId}`);
+        get(studentRef).then((snapshot) => {
+            const studentDetails = document.getElementById('studentDetails');
+            if (!snapshot.exists()) {
+                studentDetails.innerHTML = '<p class="no-data">Student not found.</p>';
+                return;
+            }
+
+            const student = snapshot.val();
+            studentDetails.innerHTML = `
+                <p><strong>Full Name:</strong> ${student.fullName || 'N/A'}</p>
+                <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
+                <p><strong>Skills:</strong> ${student.skills || 'N/A'}</p>
+                <p><strong>Experience Level:</strong> ${student.experience || 'N/A'}</p>
+                <p><strong>Education:</strong> ${student.education || 'N/A'}</p>
+                <p><strong>Resume:</strong> ${
+                    student.resumeLink ? `<a href="${student.resumeLink}" target="_blank">${student.resumeLink}</a>` : 'N/A'
+                }</p>
+                <p><strong>GitHub:</strong> ${
+                    student.githubLink ? `<a href="${student.githubLink}" target="_blank">${student.githubLink}</a>` : 'N/A'
+                }</p>
+                <p><strong>LinkedIn:</strong> ${
+                    student.linkedinLink ? `<a href="${student.linkedinLink}" target="_blank">${student.linkedinLink}</a>` : 'N/A'
+                }</p>
+                <p><strong>Bio:</strong> ${student.bio || 'N/A'}</p>
+                <p><strong>Preferred Project Types:</strong> ${student.preferredProjects || 'N/A'}</p>
+                <p><strong>Confirmed:</strong> ${student.confirmed ? 'Yes' : 'No'}</p>
+                <p><strong>Submission Timestamp:</strong> ${
+                    student.timestamp ? new Date(student.timestamp).toLocaleString() : 'N/A'
+                }</p>
+            `;
+        }).catch((error) => {
+            console.error('Error fetching student details:', error);
+            document.getElementById('studentDetails').innerHTML = '<p class="no-data">Error loading student details: ' + error.message + '</p>';
+        });
+    </script>
+</body>
+</html>

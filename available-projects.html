@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a2a44;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #2a3b5a;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #1abc9c;
+        }
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+        nav {
+            text-align: center;
+            padding: 20px;
+            background-color: #34495e;
+        }
+        nav a {
+            color: #1abc9c;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        #search-bar {
+            width: 80%;
+            padding: 15px 20px;
+            font-size: 1.5rem;
+            border: 2px solid #1abc9c;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s;
+            background-color: #3a4b6a;
+            color: #ecf0f1;
+        }
+        #search-bar:focus {
+            box-shadow: 0 0 15px #1abc9c;
+            outline: none;
+        }
+        .filters {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .filters select {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #3a4b6a;
+            color: #ecf0f1;
+        }
+        .confirmation-message {
+            text-align: center;
+            padding: 10px;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+        .confirmation-message.confirmed {
+            color: #2ecc71;
+        }
+        .confirmation-message.unconfirmed {
+            color: #e74c3c;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            background: #34495e;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ecf0f1;
+            text-align: left;
+            width: 300px;
+        }
+        .card-content h3 {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+            color: #1abc9c;
+        }
+        .card-content p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .card-content a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+        .card-content a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2a3b5a;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Available Projects</h1>
+        <p>Explore real-world startup projects and collaborate to gain hands-on experience.</p>
+    </header>
+
+    <nav>
+        <a href="main.html">Home</a>
+        <a href="available-students.html">Available Students</a>
+        <a href="community.html">Community Forum</a>
+    </nav>
+
+    <!-- Search and Filter Section -->
+    <div class="filters">
+        <input type="text" id="search-bar" placeholder="Search projects...">
+        <br>
+        <select id="skill-filter">
+            <option value="">Select Skillset</option>
+            <option value="web-development">Web Development</option>
+            <option value="marketing">Marketing</option>
+            <option value="graphic-design">Graphic Design</option>
+            <option value="data-analysis">Data Analysis</option>
+            <option value="other">Other</option>
+        </select>
+        <select id="duration-filter">
+            <option value="">Select Duration</option>
+            <option value="short-term">Short-term (≤ 2 months)</option>
+            <option value="long-term">Long-term (> 2 months)</option>
+        </select>
+    </div>
+
+    <!-- Confirmation Status Message -->
+    <div id="confirmationMessage" class="confirmation-message"></div>
+
+    <!-- Project Cards Section -->
+    <div class="container" id="projectContainer">
+        <!-- Projects will be dynamically loaded here -->
+    </div>
+
+    <footer>
+        <p>© 2024 Student-Startup Connect. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        let isConfirmed = false;
+        let userId = null;
+        let userType = null;
+        let appliedProjects = new Set(); // Track projects the user has applied to
+
+        // Check authentication state and confirmation status
+        onAuthStateChanged(auth, async (user) => {
+            const confirmationMessage = document.getElementById('confirmationMessage');
+
+            if (user) {
+                // User is logged in
+                userId = localStorage.getItem('userId');
+                userType = localStorage.getItem('userType');
+
+                if (!userId || userId !== user.uid) {
+                    console.error("User ID mismatch:", { localStorageUserId: userId, authUserId: user.uid });
+                    confirmationMessage.textContent = "Authentication error: User ID mismatch. Please log in again.";
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('userType');
+                    return;
+                }
+
+                if (!userType) {
+                    confirmationMessage.textContent = "User type not found. Please sign up again.";
+                    return;
+                }
+
+                // Check confirmation status for students
+                if (userType === 'student') {
+                    const userRef = ref(database, `users/${userId}`);
+                    const snapshot = await get(userRef);
+                    if (!snapshot.exists()) {
+                        confirmationMessage.textContent = "User data not found. Please sign up again.";
+                        return;
+                    }
+                    const userData = snapshot.val();
+                    console.log("Fetched user data:", userData); // Debug log
+                    isConfirmed = userData.confirmed === true || userData.confirmed === "true";
+                    console.log("isConfirmed value:", isConfirmed); // Debug log
+
+                    // Update the confirmation message
+                    if (isConfirmed) {
+                        confirmationMessage.classList.add('confirmed');
+                        confirmationMessage.textContent = "You are confirmed and can apply to projects.";
+                    } else {
+                        confirmationMessage.classList.add('unconfirmed');
+                        confirmationMessage.textContent = "You are an unconfirmed user, you cannot apply for projects.";
+                    }
+
+                    // Fetch applications to check which projects the user has already applied to
+                    const applicationsRef = ref(database, 'applications');
+                    const applicationsSnapshot = await get(applicationsRef);
+                    if (applicationsSnapshot.exists()) {
+                        const applications = applicationsSnapshot.val();
+                        Object.values(applications).forEach(app => {
+                            if (app.studentId === userId) {
+                                appliedProjects.add(app.projectId);
+                            }
+                        });
+                    }
+                } else {
+                    // Startups or other user types can view projects but cannot apply
+                    isConfirmed = false;
+                    confirmationMessage.textContent = "Only students can apply for projects.";
+                }
+            } else {
+                // User is not logged in
+                confirmationMessage.textContent = "Log in as a student to apply for projects.";
+            }
+
+            // Load projects regardless of login status
+            loadProjects();
+        });
+
+        // Reference to the projects in Firebase
+        const projectsRef = ref(database, 'projects');
+        let allProjects = [];
+
+        // Function to render project cards
+        function renderProjects(projects) {
+            const container = document.getElementById('projectContainer');
+            container.innerHTML = ''; // Clear existing cards
+
+            if (projects.length === 0) {
+                container.innerHTML = '<p>No open projects available.</p>';
+                return;
+            }
+
+            projects.forEach(project => {
+                // Only display projects that are confirmed and have status "Open"
+                if (project.confirmed === true && project.status === 'Open') {
+                    const hasApplied = appliedProjects.has(project.id);
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="card-content">
+                            <h3>${project.projectTitle}</h3>
+                            <p>${project.description}</p>
+                            <p><strong>Skills Required:</strong> ${project.skills}</p>
+                            <p><strong>Duration:</strong> ${project.duration}</p>
+                            <p><strong>Startup:</strong> ${project.startup}</p>
+                            <p><strong>Compensation:</strong> ${project.compensation}</p>
+                            <a href="project-details.html?id=${project.id}">View Details</a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        // Fetch projects from Firebase
+        function loadProjects() {
+            onValue(projectsRef, (snapshot) => {
+                allProjects = [];
+                const data = snapshot.val();
+                console.log('Fetched data from Firebase:', data); // Debug log
+
+                if (data) {
+                    Object.keys(data).forEach(key => {
+                        const project = data[key];
+                        project.id = key; // Add the Firebase key as the project ID
+                        allProjects.push(project);
+                    });
+                } else {
+                    console.log('No projects found in Firebase.');
+                }
+
+                renderProjects(allProjects);
+            }, (error) => {
+                console.error('Error fetching projects:', error);
+            });
+        }
+
+        // Search Functionality
+        document.getElementById('search-bar').addEventListener('input', (event) => {
+            const query = event.target.value.toLowerCase();
+            const filteredProjects = allProjects.filter(project => 
+                project.projectTitle.toLowerCase().includes(query) ||
+                project.description.toLowerCase().includes(query)
+            );
+            renderProjects(filteredProjects);
+        });
+
+        // Skill Filter Functionality
+        document.getElementById('skill-filter').addEventListener('change', (event) => {
+            const skill = event.target.value.toLowerCase();
+            const filteredProjects = skill
+                ? allProjects.filter(project => project.skills && project.skills.toLowerCase().includes(skill))
+                : allProjects;
+            renderProjects(filteredProjects);
+        });
+
+        // Duration Filter Functionality
+        document.getElementById('duration-filter').addEventListener('change', (event) => {
+            const duration = event.target.value;
+            const filteredProjects = duration
+                ? allProjects.filter(project => {
+                    const durationMonths = parseInt(project.duration) || 0;
+                    if (duration === 'short-term') {
+                        return durationMonths <= 2;
+                    } else if (duration === 'long-term') {
+                        return durationMonths > 2;
+                    }
+                    return true;
+                })
+                : allProjects;
+            renderProjects(filteredProjects);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a2a44;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #2a3b5a;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #1abc9c;
+        }
+        nav {
+            text-align: center;
+            padding: 20px;
+            background-color: #34495e;
+        }
+        nav a {
+            color: #1abc9c;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .form-container {
+            background-color: #2a3b5a;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        h2 {
+            color: #1abc9c;
+        }
+        .confirmation-message {
+            text-align: center;
+            padding: 10px;
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .confirmation-message.confirmed {
+            color: #2ecc71;
+        }
+        .confirmation-message.unconfirmed {
+            color: #e74c3c;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #1abc9c;
+            border-radius: 5px;
+            background-color: #3a4b6a;
+            color: #ecf0f1;
+        }
+        input:disabled, textarea:disabled, button:disabled {
+            background-color: #4a5b7a;
+            cursor: not-allowed;
+        }
+        button {
+            background-color: #1abc9c;
+            color: #1a2a44;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        button:hover:not(:disabled) {
+            background-color: #16a085;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #2a3b5a;
+            margin-top: 20px;
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Apply for Project</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="available-projects.html">Available Projects</a>
+        <a href="student-profile.html">Student Profile</a>
+        <a href="community.html">Community Forum</a>
+    </nav>
+
+    <div class="form-container" id="formContainer">
+        <h2>Application Form</h2>
+        <!-- Confirmation Status Message -->
+        <div id="confirmationMessage" class="confirmation-message"></div>
+        <form id="applicationForm">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g., John Doe" required disabled>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="e.g., john.doe@example.com" required disabled>
+
+            <label for="resumeLink">Resume Link (Google Drive, Dropbox, etc.)</label>
+            <input type="url" id="resumeLink" name="resumeLink" placeholder="e.g., https://drive.google.com/your-resume" required>
+
+            <label for="githubLink">GitHub Profile (Optional)</label>
+            <input type="url" id="githubLink" name="githubLink" placeholder="e.g., https://github.com/yourusername">
+
+            <label for="linkedinLink">LinkedIn Profile (Optional)</label>
+            <input type="url" id="linkedinLink" name="linkedinLink" placeholder="e.g., https://linkedin.com/in/yourusername">
+
+            <label for="coverLetter">Cover Letter</label>
+            <textarea id="coverLetter" name="coverLetter" rows="5" placeholder="Explain why you are a good fit for this project..." required></textarea>
+
+            <label for="additionalInfo">Additional Information (Optional)</label>
+            <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any other relevant information..."></textarea>
+
+            <button type="submit" id="submitButton">Submit Application</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>© 2024 Student-Startup Connect. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getDatabase, ref, push, set, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Get DOM elements
+        const formContainer = document.getElementById('formContainer');
+        const applicationForm = document.getElementById('applicationForm');
+        const fullNameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('email');
+        const submitButton = document.getElementById('submitButton');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+
+        // Get the project ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectId = urlParams.get('projectId');
+
+        if (!projectId) {
+            formContainer.innerHTML = '<p class="error">Error: No project ID provided.</p>';
+        } else {
+            // Check authentication state and fetch user data
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    formContainer.innerHTML = '<p class="error">Please log in to apply for this project.</p>';
+                    return;
+                }
+
+                const userId = localStorage.getItem('userId');
+                const userType = localStorage.getItem('userType');
+
+                if (!userId || !userType) {
+                    formContainer.innerHTML = '<p class="error">User session not found. Please log in again.</p>';
+                    return;
+                }
+
+                if (userType !== 'student') {
+                    formContainer.innerHTML = '<p class="error">Only students can apply for projects.</p>';
+                    return;
+                }
+
+                let isConfirmed = false;
+
+                // Fetch user data to pre-fill name and email and check confirmation status
+                try {
+                    const userRef = ref(database, `users/${userId}`);
+                    const userSnapshot = await get(userRef);
+                    if (userSnapshot.exists()) {
+                        const userData = userSnapshot.val();
+                        console.log("Fetched user data:", userData); // Debug log
+                        fullNameInput.value = `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 'Not provided';
+                        emailInput.value = userData.email || 'Not provided';
+                        isConfirmed = userData.confirmed === true || userData.confirmed === "true";
+                        console.log("isConfirmed value:", isConfirmed); // Debug log
+
+                        // Update confirmation message and form accessibility
+                        if (isConfirmed) {
+                            confirmationMessage.classList.add('confirmed');
+                            confirmationMessage.textContent = "You are confirmed and can apply for this project.";
+                            // Form inputs are already enabled by default
+                        } else {
+                            confirmationMessage.classList.add('unconfirmed');
+                            confirmationMessage.textContent = "You are an unconfirmed user, you cannot apply for projects.";
+                            // Disable all form inputs except the pre-filled ones
+                            document.querySelectorAll('#applicationForm input:not(#fullName):not(#email), #applicationForm textarea, #submitButton').forEach(element => {
+                                element.disabled = true;
+                            });
+                        }
+                    } else {
+                        formContainer.innerHTML = '<p class="error">User data not found. Please sign up again.</p>';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    formContainer.innerHTML = '<p class="error">Error loading user data: ' + error.message + '</p>';
+                    return;
+                }
+
+                // Handle form submission
+                applicationForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    if (!isConfirmed) {
+                        alert("You are an unconfirmed user, you cannot apply for projects.");
+                        return;
+                    }
+
+                    // Get form values
+                    const fullName = fullNameInput.value;
+                    const email = emailInput.value;
+                    const resumeLink = document.getElementById('resumeLink').value;
+                    const githubLink = document.getElementById('githubLink').value;
+                    const linkedinLink = document.getElementById('linkedinLink').value;
+                    const coverLetter = document.getElementById('coverLetter').value;
+                    const additionalInfo = document.getElementById('additionalInfo').value;
+
+                    try {
+                        // Save application to Firebase under applications/<applicationId>
+                        const applicationsRef = ref(database, 'applications');
+                        const newApplication = push(applicationsRef);
+                        await set(newApplication, {
+                            studentId: userId,
+                            projectId: projectId,
+                            fullName,
+                            email,
+                            resumeLink,
+                            githubLink,
+                            linkedinLink,
+                            coverLetter,
+                            additionalInfo,
+                            status: 'Pending',
+                            timestamp: Date.now()
+                        });
+
+                        alert('Application submitted successfully!');
+                        applicationForm.reset();
+                        fullNameInput.value = fullName; // Restore pre-filled values
+                        emailInput.value = email;
+                        window.location.href = `project-details.html?id=${projectId}`; // Redirect back to project details
+                    } catch (error) {
+                        console.error('Error submitting application:', error);
+                        alert('Error submitting application: ' + error.message);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

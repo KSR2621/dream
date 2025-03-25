@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Student-Startup Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #34495e;
+            padding: 10px 20px;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            gap: 15px;
+        }
+        .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #1abc9c;
+        }
+        .auth-buttons button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            background-color: #ecf0f1;
+            color: #333;
+            border: none;
+        }
+        .auth-buttons button:hover {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h2, h3, h4 {
+            color: #1abc9c;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            margin-bottom: 10px;
+        }
+        .subsection {
+            margin-bottom: 20px;
+        }
+        .info-item {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #3e5a74;
+            border-radius: 5px;
+        }
+        .info-item strong {
+            color: #1abc9c;
+        }
+        .confirmation-status {
+            color: #e74c3c;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        /* Card styles for startup projects */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            background: #34495e;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #ecf0f1;
+            text-align: left;
+            width: 300px;
+        }
+        .card-content h4 {
+            font-size: 1.8rem;
+            margin: 0 0 10px;
+            color: #1abc9c;
+        }
+        .card-content p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .project-actions button {
+            padding: 8px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-project {
+            background-color: #e74c3c;
+            color: #ecf0f1;
+        }
+        .delete-project:disabled {
+            background-color: #c0392b;
+            cursor: not-allowed;
+        }
+        /* Styles for student project lists */
+        .project-list {
+            list-style: none;
+            padding: 0;
+        }
+        .project-item {
+            background-color: #3e5a74;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .project-item span {
+            font-weight: 600;
+            color: #1abc9c;
+        }
+        .project-done {
+            background-color: #2ecc71;
+            color: #1a2a44;
+        }
+        .project-remaining {
+            background-color: #f39c12;
+            color: #1a2a44;
+        }
+        .project-accept {
+            background-color: #1abc9c;
+            color: #1a2a44;
+        }
+        .project-reject {
+            background-color: #e74c3c;
+            color: #ecf0f1;
+        }
+        .loading, .error {
+            text-align: center;
+            padding: 20px;
+            color: #1abc9c;
+        }
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="available-projects.html">Available Projects</a>
+            <a href="available-students.html">Available Students</a>
+            <a href="community.html">Community Forum</a>
+        </div>
+        <div class="auth-buttons">
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <h2>Profile</h2>
+
+        <!-- Personal/Company Information -->
+        <div class="section" id="personalInfo">
+            <h3 id="infoTitle"></h3>
+            <div id="infoDetails" class="loading">Loading profile...</div>
+        </div>
+
+        <!-- For Students: Past Projects -->
+        <div class="section" id="pastProjects" style="display: none;">
+            <h3>Past Projects</h3>
+            <ul id="pastProjectsList" class="project-list"></ul>
+        </div>
+
+        <!-- For Students: Current Projects -->
+        <div class="section" id="currentProjects" style="display: none;">
+            <h3>Current Projects</h3>
+            <ul id="currentProjectsList" class="project-list"></ul>
+        </div>
+
+        <!-- For Students: Applied Projects -->
+        <div class="section" id="appliedProjects" style="display: none;">
+            <h3>Applied Projects</h3>
+            <ul id="appliedProjectsList" class="project-list"></ul>
+        </div>
+
+        <!-- For Startups: Uploaded Projects (split into three sections) -->
+        <div class="section" id="uploadedProjects" style="display: none;">
+            <h3>Uploaded Projects</h3>
+            <!-- Confirmed Projects -->
+            <div class="subsection" id="confirmedProjects">
+                <h4>Confirmed Projects</h4>
+                <div id="confirmedProjectsList" class="card-container"></div>
+            </div>
+            <!-- In Progress Projects -->
+            <div class="subsection" id="inProgressProjects">
+                <h4>In Progress Projects</h4>
+                <div id="inProgressProjectsList" class="card-container"></div>
+            </div>
+            <!-- Done Projects -->
+            <div class="subsection" id="doneProjects">
+                <h4>Done Projects</h4>
+                <div id="doneProjectsList" class="card-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, get, update, set, remove, push } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const database = getDatabase(app);
+
+            console.log("Firebase initialized successfully");
+
+            // Check authentication state
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    alert("Please log in to view your profile.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Get user details from localStorage
+                const userId = localStorage.getItem('userId');
+                const userType = localStorage.getItem('userType');
+
+                if (!userId || !userType) {
+                    alert("User session not found. Please log in again.");
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                console.log("User authenticated:", { userId, userType });
+
+                // Load user profile
+                const userRef = ref(database, `users/${userId}`);
+                get(userRef).then((snapshot) => {
+                    if (!snapshot.exists()) {
+                        document.getElementById('infoDetails').innerHTML = '<div class="error">User data not found. Please sign up again.</div>';
+                        return;
+                    }
+
+                    const userData = snapshot.val();
+                    // Fetch the latest confirmation status from the database
+                    const isConfirmed = userData.confirmed === true;
+                    // Update localStorage with the latest confirmation status
+                    localStorage.setItem('isConfirmed', isConfirmed.toString());
+
+                    console.log("User data loaded:", { userData, isConfirmed });
+
+                    const infoTitle = document.getElementById('infoTitle');
+                    const infoDetails = document.getElementById('infoDetails');
+
+                    if (userType === 'student') {
+                        // Display student information
+                        infoTitle.textContent = "Personal Information";
+                        infoDetails.innerHTML = `
+                            <div class="info-item"><strong>First Name:</strong> ${userData.firstName || 'Not provided'}</div>
+                            <div class="info-item"><strong>Last Name:</strong> ${userData.lastName || 'Not provided'}</div>
+                            <div class="info-item"><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
+                            <div class="info-item"><strong>Skills:</strong> ${userData.skills ? userData.skills.join(', ') : 'Not provided'}</div>
+                            <div class="info-item"><strong>Education:</strong> ${userData.education || 'Not provided'}</div>
+                            <div class="info-item"><strong>Portfolio:</strong> ${userData.portfolio ? `<a href="${userData.portfolio}" target="_blank">${userData.portfolio}</a>` : 'Not provided'}</div>
+                            <div class="info-item"><strong>Confirmation Status:</strong> ${isConfirmed ? 'Confirmed' : 'Unconfirmed'}</div>
+                            ${!isConfirmed ? '<p class="confirmation-status">Note: You cannot apply to projects until your profile is confirmed by the host.</p>' : ''}
+                        `;
+
+                        // Show student-specific sections
+                        document.getElementById('pastProjects').style.display = 'block';
+                        document.getElementById('currentProjects').style.display = 'block';
+                        document.getElementById('appliedProjects').style.display = 'block';
+
+                        // Load past projects with Remaining button (visible for 36 hours)
+                        const pastProjectsRef = ref(database, `users/${userId}/pastProjects`);
+                        get(pastProjectsRef).then(async (snapshot) => {
+                            const pastProjectsList = document.getElementById('pastProjectsList');
+                            pastProjectsList.innerHTML = ''; // Clear existing content
+                            if (snapshot.exists()) {
+                                const projects = snapshot.val();
+                                if (Object.keys(projects).length > 0) {
+                                    for (const projectId of Object.keys(projects)) {
+                                        const project = projects[projectId];
+                                        const projectRef = ref(database, `projects/${projectId}`);
+                                        const projectSnapshot = await get(projectRef);
+                                        let completedTimestamp = null;
+                                        if (projectSnapshot.exists()) {
+                                            const projectData = projectSnapshot.val();
+                                            completedTimestamp = projectData.completedTimestamp || null;
+                                        }
+
+                                        const li = document.createElement('li');
+                                        li.className = 'project-item';
+                                        let buttonHtml = '';
+                                        if (completedTimestamp) {
+                                            const timeSinceCompleted = Date.now() - completedTimestamp;
+                                            const hoursSinceCompleted = timeSinceCompleted / (1000 * 60 * 60);
+                                            if (hoursSinceCompleted <= 36) {
+                                                buttonHtml = `
+                                                    <div class="project-actions">
+                                                        <button class="project-remaining" data-project-id="${projectId}">Remaining</button>
+                                                    </div>
+                                                `;
+                                            }
+                                        }
+                                        li.innerHTML = `
+                                            <div>
+                                                <span>${project.title}</span> - ${project.description}
+                                            </div>
+                                            ${buttonHtml}
+                                        `;
+                                        pastProjectsList.appendChild(li);
+
+                                        // Handle Remaining button for past projects
+                                        const remainingButton = li.querySelector('.project-remaining');
+                                        if (remainingButton) {
+                                            remainingButton.addEventListener('click', async () => {
+                                                try {
+                                                    // Update project status to Open
+                                                    const projectRef = ref(database, `projects/${projectId}`);
+                                                    await update(projectRef, { 
+                                                        status: 'Open',
+                                                        completedTimestamp: null // Reset the timestamp
+                                                    });
+                                                    console.log(`Project ${projectId} status updated to Open`);
+
+                                                    // Move project back to currentProjects
+                                                    const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
+                                                    await set(currentProjectRef, {
+                                                        title: project.title,
+                                                        description: project.description,
+                                                        studentAccepted: true // Mark as accepted by student
+                                                    });
+
+                                                    // Recreate the application with status: Accepted
+                                                    const applicationsRef = ref(database, `applications`);
+                                                    const newAppRef = push(applicationsRef);
+                                                    await set(newAppRef, {
+                                                        projectId: projectId,
+                                                        studentId: userId,
+                                                        fullName: `${userData.firstName} ${userData.lastName}`,
+                                                        email: userData.email,
+                                                        resumeLink: userData.resume || '',
+                                                        githubLink: userData.github || '',
+                                                        linkedinLink: userData.linkedin || '',
+                                                        coverLetter: 'Reinstated application after marking as remaining',
+                                                        additionalInfo: '',
+                                                        status: 'Accepted',
+                                                        timestamp: Date.now()
+                                                    });
+                                                    console.log(`Recreated application for project ${projectId} with status Accepted`);
+
+                                                    // Remove from pastProjects
+                                                    const pastProjectRef = ref(database, `users/${userId}/pastProjects/${projectId}`);
+                                                    await remove(pastProjectRef);
+                                                    console.log(`Moved project ${projectId} back to current projects for student ${userId}`);
+
+                                                    alert('Project moved back to current projects!');
+                                                    window.location.reload();
+                                                } catch (error) {
+                                                    console.error('Error moving project to current:', error);
+                                                    alert('Error moving project to current: ' + error.message);
+                                                }
+                                            });
+                                        }
+                                    }
+                                } else {
+                                    pastProjectsList.innerHTML = '<li>No past projects found.</li>';
+                                }
+                            } else {
+                                pastProjectsList.innerHTML = '<li>No past projects found.</li>';
+                            }
+                        }).catch((error) => {
+                            console.error('Error loading past projects:', error);
+                            document.getElementById('pastProjectsList').innerHTML = '<li class="error">Error loading past projects: ' + error.message + '</li>';
+                        });
+
+                        // Load current projects with Accept/Reject or Done button
+                        const currentProjectsRef = ref(database, `users/${userId}/currentProjects`);
+                        get(currentProjectsRef).then((snapshot) => {
+                            const currentProjectsList = document.getElementById('currentProjectsList');
+                            currentProjectsList.innerHTML = ''; // Clear existing content
+                            if (snapshot.exists()) {
+                                const projects = snapshot.val();
+                                if (Object.keys(projects).length > 0) {
+                                    Object.keys(projects).forEach((projectId) => {
+                                        const project = projects[projectId];
+                                        const li = document.createElement('li');
+                                        li.className = 'project-item';
+                                        let buttonHtml = '';
+                                        if (project.studentAccepted) {
+                                            // Show only Done button if student has accepted
+                                            buttonHtml = `
+                                                <div class="project-actions">
+                                                    <button class="project-done" data-project-id="${projectId}">Done</button>
+                                                </div>
+                                            `;
+                                        } else {
+                                            // Show Accept and Reject buttons if not yet accepted
+                                            buttonHtml = `
+                                                <div class="project-actions">
+                                                    <button class="project-accept" data-project-id="${projectId}">Accept</button>
+                                                    <button class="project-reject" data-project-id="${projectId}">Reject</button>
+                                                </div>
+                                            `;
+                                        }
+                                        li.innerHTML = `
+                                            <div>
+                                                <span>${project.title}</span> - ${project.description}
+                                            </div>
+                                            ${buttonHtml}
+                                        `;
+                                        currentProjectsList.appendChild(li);
+
+                                        // Handle Done button
+                                        const doneButton = li.querySelector('.project-done');
+                                        if (doneButton) {
+                                            doneButton.addEventListener('click', async () => {
+                                                try {
+                                                    // Update project status to Completed
+                                                    const projectRef = ref(database, `projects/${projectId}`);
+                                                    await update(projectRef, { 
+                                                        status: 'Completed',
+                                                        completedTimestamp: Date.now() // Store the completion timestamp
+                                                    });
+                                                    console.log(`Project ${projectId} status updated to Completed`);
+
+                                                    // Move project to pastProjects
+                                                    const pastProjectRef = ref(database, `users/${userId}/pastProjects/${projectId}`);
+                                                    await set(pastProjectRef, {
+                                                        title: project.title,
+                                                        description: project.description
+                                                    });
+
+                                                    // Remove from currentProjects
+                                                    const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
+                                                    await remove(currentProjectRef);
+                                                    console.log(`Moved project ${projectId} to past projects for student ${userId}`);
+
+                                                    // Remove associated applications
+                                                    const applicationsRef = ref(database, `applications`);
+                                                    const snapshot = await get(applicationsRef);
+                                                    if (snapshot.exists()) {
+                                                        const applications = snapshot.val();
+                                                        const projectApps = Object.entries(applications).filter(([_, app]) => 
+                                                            app.projectId === projectId && app.studentId === userId);
+                                                        for (const [appId, _] of projectApps) {
+                                                            await remove(ref(database, `applications/${appId}`));
+                                                            console.log(`Removed application ${appId} for project ${projectId}`);
+                                                        }
+                                                    }
+
+                                                    alert('Project marked as completed!');
+                                                    window.location.reload();
+                                                } catch (error) {
+                                                    console.error('Error marking project as completed:', error);
+                                                    alert('Error marking project as completed: ' + error.message);
+                                                }
+                                            });
+                                        }
+
+                                        // Handle Accept button
+                                        const acceptButton = li.querySelector('.project-accept');
+                                        if (acceptButton) {
+                                            acceptButton.addEventListener('click', async () => {
+                                                try {
+                                                    // Mark the project as accepted by the student
+                                                    const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
+                                                    await update(currentProjectRef, { studentAccepted: true });
+                                                    console.log(`Student ${userId} accepted project ${projectId}, studentAccepted set to true`);
+
+                                                    alert('Project accepted!');
+                                                    window.location.reload();
+                                                } catch (error) {
+                                                    console.error('Error accepting project:', error);
+                                                    alert('Error accepting project: ' + error.message);
+                                                }
+                                            });
+                                        }
+
+                                        // Handle Reject button
+                                        const rejectButton = li.querySelector('.project-reject');
+                                        if (rejectButton) {
+                                            rejectButton.addEventListener('click', async () => {
+                                                try {
+                                                    // Unconfirm the application
+                                                    const applicationsRef = ref(database, `applications`);
+                                                    const snapshot = await get(applicationsRef);
+                                                    if (snapshot.exists()) {
+                                                        const applications = snapshot.val();
+                                                        const projectApps = Object.entries(applications).filter(([_, app]) => 
+                                                            app.projectId === projectId && app.studentId === userId && app.status === 'Accepted');
+                                                        for (const [appId, _] of projectApps) {
+                                                            await update(ref(database, `applications/${appId}`), { status: 'Pending' });
+                                                            console.log(`Unconfirmed application ${appId} for project ${projectId}`);
+                                                        }
+                                                    }
+
+                                                    // Remove from currentProjects
+                                                    const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
+                                                    await remove(currentProjectRef);
+                                                    console.log(`Removed project ${projectId} from student ${userId}'s current projects`);
+
+                                                    alert('Project rejected!');
+                                                    window.location.reload();
+                                                } catch (error) {
+                                                    console.error('Error rejecting project:', error);
+                                                    alert('Error rejecting project: ' + error.message);
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    currentProjectsList.innerHTML = '<li>No current projects found.</li>';
+                                }
+                            } else {
+                                currentProjectsList.innerHTML = '<li>No current projects found.</li>';
+                            }
+                        }).catch((error) => {
+                            console.error('Error loading current projects:', error);
+                            document.getElementById('currentProjectsList').innerHTML = '<li class="error">Error loading current projects: ' + error.message + '</li>';
+                        });
+
+                        // Load applied projects (exclude completed projects)
+                        const applicationsRef = ref(database, `applications`);
+                        get(applicationsRef).then(async (snapshot) => {
+                            const appliedProjectsList = document.getElementById('appliedProjectsList');
+                            appliedProjectsList.innerHTML = ''; // Clear existing content
+                            if (snapshot.exists()) {
+                                const applications = snapshot.val();
+                                const userApplications = Object.values(applications).filter(app => app.studentId === userId);
+                                if (userApplications.length > 0) {
+                                    // Fetch project details for each application
+                                    const projectPromises = userApplications.map(async (app) => {
+                                        const projectRef = ref(database, `projects/${app.projectId}`);
+                                        const projectSnapshot = await get(projectRef);
+                                        if (projectSnapshot.exists()) {
+                                            const project = projectSnapshot.val();
+                                            // Exclude completed projects
+                                            if (project.status !== 'Completed') {
+                                                return { project, status: app.status };
+                                            }
+                                        }
+                                        return null;
+                                    });
+
+                                    const projectResults = await Promise.all(projectPromises);
+                                    const validProjects = projectResults.filter(result => result !== null);
+
+                                    if (validProjects.length > 0) {
+                                        validProjects.forEach(({ project, status }) => {
+                                            const li = document.createElement('li');
+                                            li.className = 'project-item';
+                                            li.innerHTML = `<span>${project.projectTitle}</span> - ${project.description} (Status: ${status})`;
+                                            appliedProjectsList.appendChild(li);
+                                        });
+                                    } else {
+                                        appliedProjectsList.innerHTML = '<li>No applied projects found.</li>';
+                                    }
+                                } else {
+                                    appliedProjectsList.innerHTML = '<li>No applied projects found.</li>';
+                                }
+                            } else {
+                                appliedProjectsList.innerHTML = '<li>No applied projects found.</li>';
+                            }
+                        }).catch((error) => {
+                            console.error('Error loading applied projects:', error);
+                            document.getElementById('appliedProjectsList').innerHTML = '<li class="error">Error loading applied projects: ' + error.message + '</li>';
+                        });
+
+                    } else if (userType === 'startup') {
+                        // Display startup information
+                        infoTitle.textContent = "Company Details";
+                        infoDetails.innerHTML = `
+                            <div class="info-item"><strong>Company Name:</strong> ${userData.companyName || 'Not provided'}</div>
+                            <div class="info-item"><strong>Description:</strong> ${userData.companyDescription || 'Not provided'}</div>
+                            <div class="info-item"><strong>Industry:</strong> ${userData.industry || 'Not provided'}</div>
+                            <div class="info-item"><strong>Website:</strong> ${userData.website ? `<a href="${userData.website}" target="_blank">${userData.website}</a>` : 'Not provided'}</div>
+                            <div class="info-item"><strong>Location:</strong> ${userData.location || 'Not provided'}</div>
+                            <div class="info-item"><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
+                        `;
+
+                        // Show startup-specific sections
+                        document.getElementById('uploadedProjects').style.display = 'block';
+
+                        // Load uploaded projects and categorize them
+                        const projectsRef = ref(database, 'projects');
+                        const applicationsRef = ref(database, 'applications');
+
+                        Promise.all([
+                            get(projectsRef),
+                            get(applicationsRef)
+                        ]).then(async ([projectsSnapshot, applicationsSnapshot]) => {
+                            const confirmedProjectsList = document.getElementById('confirmedProjectsList');
+                            const inProgressProjectsList = document.getElementById('inProgressProjectsList');
+                            const doneProjectsList = document.getElementById('doneProjectsList');
+
+                            confirmedProjectsList.innerHTML = ''; // Clear existing content
+                            inProgressProjectsList.innerHTML = '';
+                            doneProjectsList.innerHTML = '';
+
+                            let allProjects = {};
+                            let allApplications = {};
+
+                            // Fetch projects
+                            if (projectsSnapshot.exists()) {
+                                allProjects = projectsSnapshot.val();
+                                console.log("Fetched projects:", allProjects);
+                            } else {
+                                console.log("No projects found in Firebase.");
+                                confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
+                                inProgressProjectsList.innerHTML = '<p>No in-progress projects available.</p>';
+                                doneProjectsList.innerHTML = '<p>No completed projects available.</p>';
+                                return;
+                            }
+
+                            // Fetch applications
+                            if (applicationsSnapshot.exists()) {
+                                allApplications = applicationsSnapshot.val();
+                                console.log("Fetched applications:", allApplications);
+                            } else {
+                                console.log("No applications found in Firebase.");
+                                allApplications = {};
+                            }
+
+                            // Filter projects posted by this startup
+                            const userProjects = Object.entries(allProjects).filter(([_, project]) => project.postedBy === userId);
+                            console.log("User projects:", userProjects);
+
+                            if (userProjects.length === 0) {
+                                confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
+                                inProgressProjectsList.innerHTML = '<p>No in-progress projects available.</p>';
+                                doneProjectsList.innerHTML = '<p>No completed projects available.</p>';
+                                return;
+                            }
+
+                            // Categorize projects
+                            const confirmedProjects = [];
+                            const inProgressProjects = [];
+                            const doneProjects = [];
+
+                            for (const [projectId, project] of userProjects) {
+                                console.log(`Processing project ${projectId}:`, project);
+                                if (project.status === 'Completed') {
+                                    doneProjects.push([projectId, project]);
+                                    console.log(`Project ${projectId} categorized as Done`);
+                                } else if (project.status === 'In Progress') {
+                                    inProgressProjects.push([projectId, project]);
+                                    console.log(`Project ${projectId} categorized as In Progress (status-based)`);
+                                } else {
+                                    const isAccepted = await hasAcceptedApplications(projectId, allApplications);
+                                    if (isAccepted) {
+                                        inProgressProjects.push([projectId, project]);
+                                        console.log(`Project ${projectId} categorized as In Progress (application-based)`);
+                                    } else if (project.confirmed === true && project.status === 'Open') {
+                                        confirmedProjects.push([projectId, project]);
+                                        console.log(`Project ${projectId} categorized as Confirmed`);
+                                    } else {
+                                        console.log(`Project ${projectId} does not fit any category:`, project);
+                                    }
+                                }
+                            }
+
+                            // Render Confirmed Projects
+                            if (confirmedProjects.length === 0) {
+                                confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
+                            } else {
+                                confirmedProjects.forEach(([projectId, project]) => {
+                                    console.log(`Rendering Confirmed project ${projectId}`);
+                                    renderProjectCard(projectId, project, confirmedProjectsList, 'Confirmed');
+                                });
+                            }
+
+                            // Render In Progress Projects
+                            if (inProgressProjects.length === 0) {
+                                inProgressProjectsList.innerHTML = '<p>No in-progress projects available.</p>';
+                            } else {
+                                inProgressProjects.forEach(([projectId, project]) => {
+                                    console.log(`Rendering In Progress project ${projectId}`);
+                                    renderProjectCard(projectId, project, inProgressProjectsList, 'In Progress');
+                                });
+                            }
+
+                            // Render Done Projects
+                            if (doneProjects.length === 0) {
+                                doneProjectsList.innerHTML = '<p>No completed projects available.</p>';
+                            } else {
+                                doneProjects.forEach(([projectId, project]) => {
+                                    console.log(`Rendering Done project ${projectId}`);
+                                    renderProjectCard(projectId, project, doneProjectsList, 'Done');
+                                });
+                            }
+                        }).catch((error) => {
+                            console.error('Error loading uploaded projects:', error);
+                            document.getElementById('confirmedProjectsList').innerHTML = '<p class="error">Error loading projects: ' + error.message + '</p>';
+                            document.getElementById('inProgressProjectsList').innerHTML = '<p class="error">Error loading projects: ' + error.message + '</p>';
+                            document.getElementById('doneProjectsList').innerHTML = '<p class="error">Error loading projects: ' + error.message + '</p>';
+                        });
+                    } else {
+                        document.getElementById('infoDetails').innerHTML = '<div class="error">Invalid user type. Please sign up again.</div>';
+                    }
+                }).catch((error) => {
+                    console.error('Error loading profile:', error);
+                    document.getElementById('infoDetails').innerHTML = '<div class="error">Error loading profile data: ' + error.message + '</div>';
+                });
+            });
+
+            // Function to check if a project has accepted applications and the student has accepted
+            async function hasAcceptedApplications(projectId, applications) {
+                if (!applications || Object.keys(applications).length === 0) {
+                    console.log(`No applications available to check for project ${projectId}`);
+                    return false;
+                }
+
+                const projectApps = Object.values(applications).filter(app => app.projectId === projectId && app.status === 'Accepted');
+                console.log(`Project ${projectId} applications with status Accepted:`, projectApps);
+
+                if (projectApps.length === 0) {
+                    console.log(`Project ${projectId} has no accepted applications`);
+                    return false;
+                }
+
+                // Check if the student has accepted the project
+                for (const app of projectApps) {
+                    const studentProjectRef = ref(database, `users/${app.studentId}/currentProjects/${projectId}`);
+                    const snapshot = await get(studentProjectRef);
+                    if (snapshot.exists()) {
+                        const projectData = snapshot.val();
+                        console.log(`Project ${projectId} data for student ${app.studentId}:`, projectData);
+                        if (projectData.studentAccepted === true) {
+                            console.log(`Project ${projectId} is accepted by student ${app.studentId}, marking as In Progress`);
+                            return true;
+                        } else {
+                            console.log(`Project ${projectId} is not yet accepted by student ${app.studentId}`);
+                        }
+                    } else {
+                        console.log(`Project ${projectId} not found in student ${app.studentId}'s current projects`);
+                    }
+                }
+                return false;
+            }
+
+            // Function to render a project card
+            function renderProjectCard(projectId, project, container, status) {
+                console.log(`Rendering project card for project ${projectId} with status ${status}`, project);
+                const projectCard = document.createElement('div');
+                projectCard.className = 'card';
+                projectCard.innerHTML = `
+                    <div class="card-content">
+                        <h4>${project.projectTitle || 'Untitled Project'}</h4>
+                        <p>${project.description || 'No description available'}</p>
+                        <p><strong>Skills Required:</strong> ${project.skills || 'Not specified'}</p>
+                        <p><strong>Duration:</strong> ${project.duration || 'Not specified'}</p>
+                        <p><strong>Startup:</strong> ${project.startup || 'Not specified'}</p>
+                        <p><strong>Compensation:</strong> ${project.compensation || 'Not specified'}</p>
+                        <p><strong>Status:</strong> ${status}</p>
+                        <div class="project-actions">
+                            <button class="delete-project" id="delete-project-${projectId}">Delete Project</button>
+                        </div>
+                    </div>
+                `;
+
+                const deleteProjectButton = projectCard.querySelector(`#delete-project-${projectId}`);
+                if (deleteProjectButton) {
+                    deleteProjectButton.disabled = false;
+
+                    // Handle delete project
+                    deleteProjectButton.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        console.log(`Delete project button clicked for project ${projectId}`);
+                        if (confirm('Are you sure you want to delete this project? This will also delete all associated applications.')) {
+                            try {
+                                // Delete the project
+                                await remove(ref(database, `projects/${projectId}`));
+                                console.log(`Project ${projectId} deleted successfully`);
+
+                                // Delete associated applications
+                                const applicationsRef = ref(database, `applications`);
+                                const snapshot = await get(applicationsRef);
+                                if (snapshot.exists()) {
+                                    const applications = snapshot.val();
+                                    const projectApps = Object.entries(applications).filter(([_, app]) => app.projectId === projectId);
+                                    for (const [appId, _] of projectApps) {
+                                        await remove(ref(database, `applications/${appId}`));
+                                        console.log(`Application ${appId} deleted successfully`);
+                                    }
+                                }
+
+                                // Remove project from students' current projects
+                                const applicationsSnapshot = await get(applicationsRef);
+                                let studentsWithProject = [];
+                                if (applicationsSnapshot.exists()) {
+                                    const applications = applicationsSnapshot.val();
+                                    studentsWithProject = Object.entries(applications)
+                                        .filter(([_, app]) => app.projectId === projectId && app.status === 'Accepted')
+                                        .map(([_, app]) => app.studentId);
+                                }
+                                for (const studentId of studentsWithProject) {
+                                    await remove(ref(database, `users/${studentId}/currentProjects/${projectId}`));
+                                    console.log(`Removed project ${projectId} from student ${studentId}'s current projects`);
+                                }
+
+                                alert('Project deleted successfully!');
+                                window.location.reload();
+                            } catch (error) {
+                                console.error('Error deleting project:', error);
+                                alert('Error deleting project: ' + error.message);
+                            }
+                        }
+                    });
+                } else {
+                    console.error(`Delete button not found for project ${projectId}`);
+                }
+
+                container.appendChild(projectCard);
+            }
+
+            // Handle Logout
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    localStorage.removeItem('userType');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('isConfirmed');
+                    alert('Logged out successfully!');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Error logging out:', error);
+                    alert('Error logging out: ' + error.message);
+                }
+            });
+        } catch (error) {
+            console.error('Error initializing Firebase:', error);
+            alert('Error initializing Firebase: ' + error.message);
+        }
+    </script>
+</body>
+</html>

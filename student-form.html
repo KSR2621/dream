@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile Submission</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+        }
+        h2 {
+            color: #1abc9c;
+            font-size: 1.5rem;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+        }
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+        button {
+            background-color: #1abc9c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Submit Your Profile</h2>
+        <form id="studentForm">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g., John Doe" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" readonly required>
+
+            <label for="skills">Skills</label>
+            <input type="text" id="skills" name="skills" placeholder="e.g., Python, JavaScript, UI/UX Design" required>
+
+            <label for="experience">Experience Level</label>
+            <select id="experience" name="experience" required>
+                <option value="">Select experience level</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+
+            <label for="education">Education</label>
+            <input type="text" id="education" name="education" placeholder="e.g., B.Sc. Computer Science, XYZ University" required>
+
+            <label for="resumeLink">Resume Link (Google Drive, Dropbox, etc.)</label>
+            <input type="url" id="resumeLink" name="resumeLink" placeholder="e.g., https://drive.google.com/your-resume" required>
+
+            <label for="githubLink">GitHub Profile (Optional)</label>
+            <input type="url" id="githubLink" name="githubLink" placeholder="e.g., https://github.com/yourusername">
+
+            <label for="linkedinLink">LinkedIn Profile (Optional)</label>
+            <input type="url" id="linkedinLink" name="linkedinLink" placeholder="e.g., https://linkedin.com/in/yourusername">
+
+            <label for="bio">Bio (Tell us about yourself)</label>
+            <textarea id="bio" name="bio" rows="4" placeholder="e.g., I am a passionate computer science student with experience in web development..." required></textarea>
+
+            <label for="preferredProjects">Preferred Project Types</label>
+            <input type="text" id="preferredProjects" name="preferredProjects" placeholder="e.g., Web Development, Data Analysis" required>
+
+            <button type="submit">Submit Profile</button>
+        </form>
+    </div>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0wtET8bTtw_133RE4rWZiRFGESfbDtC0",
+            authDomain: "student-startup-connect.firebaseapp.com",
+            databaseURL: "https://student-startup-connect-default-rtdb.firebaseio.com",
+            projectId: "student-startup-connect",
+            storageBucket: "student-startup-connect.firebasestorage.app",
+            messagingSenderId: "570854385529",
+            appId: "1:570854385529:web:e45e5076a0cbcb9a56f1a8",
+            measurementId: "G-T5PMGL8K26"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Check authentication state
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                alert("Please log in to submit your profile.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Get user details from localStorage
+            const userId = localStorage.getItem('userId');
+            const userType = localStorage.getItem('userType');
+
+            // Verify that the localStorage userId matches the authenticated user's UID
+            if (!userId || userId !== user.uid) {
+                console.error("User ID mismatch:", { localStorageUserId: userId, authUserId: user.uid });
+                alert("Authentication error: User ID mismatch. Please log in again.");
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userType');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (!userType || userType !== 'student') {
+                alert("Only students can submit this form. Please sign up as a student.");
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            console.log("Authenticated user:", { userId, userType, email: user.email });
+
+            // Fetch user data to pre-fill email
+            const userRef = ref(database, `users/${userId}`);
+            const snapshot = await get(userRef);
+            if (!snapshot.exists()) {
+                alert("User data not found. Please sign up again.");
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            const userData = snapshot.val();
+            const emailInput = document.getElementById('email');
+            emailInput.value = userData.email || '';
+        });
+
+        // Handle form submission
+        document.getElementById('studentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const userId = localStorage.getItem('userId');
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const skills = document.getElementById('skills').value;
+            const experience = document.getElementById('experience').value;
+            const education = document.getElementById('education').value;
+            const resumeLink = document.getElementById('resumeLink').value;
+            const githubLink = document.getElementById('githubLink').value;
+            const linkedinLink = document.getElementById('linkedinLink').value;
+            const bio = document.getElementById('bio').value;
+            const preferredProjects = document.getElementById('preferredProjects').value;
+
+            try {
+                console.log("Attempting to write to students node for userId:", userId);
+                // Save student profile under students node with userId as the key
+                await set(ref(database, `students/${userId}`), {
+                    userId: userId,
+                    fullName,
+                    email,
+                    skills,
+                    experience,
+                    education,
+                    resumeLink,
+                    githubLink,
+                    linkedinLink,
+                    bio,
+                    preferredProjects,
+                    confirmed: false,
+                    timestamp: Date.now()
+                });
+
+                alert('Profile submitted successfully! Awaiting host confirmation.');
+                document.getElementById('studentForm').reset();
+                // Reset email field after form reset
+                document.getElementById('email').value = email;
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Error submitting profile:', error.code, error.message);
+                alert('Error submitting profile: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
