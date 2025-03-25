@@ -33,6 +33,7 @@
             text-decoration: none;
             margin: 0 15px;
             font-size: 1.1rem;
+            display: inline-block; /* For better control on mobile */
         }
         nav a:hover {
             text-decoration: underline;
@@ -83,6 +84,7 @@
             border: 1px solid #1abc9c;
             border-radius: 5px;
             font-size: 1rem;
+            transition: all 0.3s ease;
         }
         .back-button:hover {
             background-color: #1abc9c;
@@ -94,6 +96,82 @@
             background-color: #2a3b5a;
             color: #fff;
             margin-top: 20px;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            nav {
+                padding: 10px;
+            }
+            nav a {
+                display: block; /* Stack links vertically */
+                margin: 10px 0;
+                font-size: 1rem;
+            }
+            .container {
+                max-width: 90%; /* Adjust width for mobile */
+                margin: 10px auto;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            .student-details p {
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+            .no-data {
+                font-size: 0.9rem;
+            }
+            .back-button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            footer {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 20px 10px;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            nav a {
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+            .container {
+                padding: 10px;
+            }
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+            .student-details p {
+                font-size: 0.85rem;
+                margin: 6px 0;
+            }
+            .no-data {
+                font-size: 0.85rem;
+            }
+            .back-button {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            footer {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
