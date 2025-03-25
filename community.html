@@ -10,24 +10,29 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: #2c3e50;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); /* Subtle gradient background */
             color: #ecf0f1;
+            overflow-x: hidden;
         }
         header {
-            background: linear-gradient(90deg, #2c3e50, #1abc9c);
+            background: linear-gradient(90deg, #2c3e50, #16a085); /* More vibrant gradient */
             padding: 40px 20px;
             text-align: center;
             color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
         }
         header h1 {
             margin: 0;
             font-size: 2.5rem;
             color: #1abc9c;
+            animation: fadeInDown 1s ease-in-out; /* Animation for header text */
         }
         header p {
             font-size: 1.2rem;
             margin: 5px 0 0;
             color: #ecf0f1;
+            animation: fadeInUp 1s ease-in-out 0.3s; /* Animation for subtext */
+            animation-fill-mode: both;
         }
         nav {
             display: flex;
@@ -35,6 +40,7 @@
             align-items: center;
             background: #34495e;
             padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
         }
         .nav-links {
             display: flex;
@@ -46,10 +52,13 @@
             color: #1abc9c;
             text-decoration: none;
             font-weight: bold;
-            transition: color 0.3s;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
         .nav-links a:hover {
             color: #ecf0f1;
+            background-color: #1abc9c; /* Hover background effect */
         }
         .auth-buttons {
             display: flex;
@@ -57,18 +66,20 @@
         }
         .auth-buttons button {
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 25px; /* More rounded corners */
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
-            transition: background-color 0.3s;
-            background-color: #ecf0f1;
-            color: #333;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #1abc9c, #16a085); /* Gradient background */
+            color: #fff;
             border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .auth-buttons button:hover {
-            background-color: #1abc9c;
-            color: #fff;
+            background: linear-gradient(90deg, #16a085, #1abc9c); /* Reverse gradient on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         .container {
             display: flex;
@@ -76,17 +87,34 @@
             align-items: center;
             height: calc(100vh - 300px); /* Adjust for header, nav, and footer */
             text-align: center;
+            padding: 20px;
         }
         .coming-soon {
-            background: #34495e;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #34495e, #2c3e50); /* Gradient background */
+            border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+        .coming-soon::before {
+            content: "🛠️"; /* Construction emoji as a visual element */
+            font-size: 3rem;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1abc9c;
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .coming-soon h2 {
             font-size: 2rem;
             color: #1abc9c;
-            margin: 0 0 10px;
+            margin: 20px 0 10px;
+            animation: pulse 2s infinite; /* Pulsing animation */
         }
         .coming-soon p {
             font-size: 1.2rem;
@@ -98,6 +126,146 @@
             padding: 10px;
             background: #2a3b5a;
             color: #ecf0f1;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+        footer p {
+            margin: 0;
+            transition: color 0.3s ease;
+        }
+        footer p:hover {
+            color: #1abc9c; /* Hover effect */
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            nav {
+                flex-direction: column; /* Stack nav items vertically */
+                padding: 15px;
+            }
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            .nav-links a {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+            .auth-buttons {
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 8px;
+                width: 100%;
+            }
+            .auth-buttons button {
+                width: 100%; /* Full width buttons */
+                padding: 8px;
+                font-size: 0.9rem;
+                border-radius: 20px;
+            }
+            .container {
+                height: auto; /* Remove fixed height for better mobile fit */
+                min-height: calc(100vh - 400px); /* Ensure it takes enough space */
+                padding: 20px;
+            }
+            .coming-soon {
+                padding: 20px;
+                max-width: 90%;
+            }
+            .coming-soon::before {
+                font-size: 2rem;
+                top: -30px;
+                padding: 8px;
+            }
+            .coming-soon h2 {
+                font-size: 1.5rem;
+                margin: 15px 0 8px;
+            }
+            .coming-soon p {
+                font-size: 1rem;
+            }
+            footer {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 20px 10px;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 5px 10px;
+            }
+            .auth-buttons button {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+            .coming-soon::before {
+                font-size: 1.5rem;
+                top: -25px;
+                padding: 6px;
+            }
+            .coming-soon h2 {
+                font-size: 1.3rem;
+            }
+            .coming-soon p {
+                font-size: 0.9rem;
+            }
+            footer {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
