@@ -411,13 +411,23 @@
             });
         }
 
-        // Search Functionality
+        // Search Functionality (Updated to include startup and skills)
         document.getElementById('search-bar').addEventListener('input', (event) => {
             const query = event.target.value.toLowerCase();
-            const filteredProjects = allProjects.filter(project => 
-                project.projectTitle.toLowerCase().includes(query) ||
-                project.description.toLowerCase().includes(query)
-            );
+            const filteredProjects = allProjects.filter(project => {
+                // Ensure fields are strings and handle undefined/null values
+                const projectTitle = project.projectTitle ? project.projectTitle.toLowerCase() : '';
+                const description = project.description ? project.description.toLowerCase() : '';
+                const startup = project.startup ? project.startup.toLowerCase() : '';
+                const skills = project.skills ? project.skills.toLowerCase() : '';
+
+                return (
+                    projectTitle.includes(query) ||
+                    description.includes(query) ||
+                    startup.includes(query) ||
+                    skills.includes(query)
+                );
+            });
             renderProjects(filteredProjects);
         });
 
