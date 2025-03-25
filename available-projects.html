@@ -37,6 +37,7 @@
             text-decoration: none;
             margin: 0 15px;
             font-size: 1.1rem;
+            display: inline-block;
         }
         nav a:hover {
             text-decoration: underline;
@@ -51,6 +52,13 @@
             transition: box-shadow 0.3s;
             background-color: #3a4b6a;
             color: #ecf0f1;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #search-bar::placeholder {
+            color: #ecf0f1;
+            opacity: 0.7;
         }
         #search-bar:focus {
             box-shadow: 0 0 15px #1abc9c;
@@ -68,6 +76,8 @@
             border: 1px solid #ccc;
             background-color: #3a4b6a;
             color: #ecf0f1;
+            width: 80%;
+            max-width: 300px;
         }
         .confirmation-message {
             text-align: center;
@@ -96,6 +106,9 @@
             color: #ecf0f1;
             text-align: left;
             width: 300px;
+            height: 300px; /* Make the card square */
+            flex: 0 0 300px; /* Prevent stretching, fixed width */
+            overflow-y: auto; /* Allow scrolling if content overflows */
         }
         .card-content h3 {
             font-size: 1.8rem;
@@ -118,6 +131,81 @@
             padding: 20px;
             background-color: #2a3b5a;
             margin-top: 20px;
+        }
+
+        /* Media Query for Mobile Devices (Unchanged) */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            nav {
+                padding: 15px;
+            }
+            nav a {
+                display: block;
+                margin: 10px 0;
+                font-size: 1rem;
+            }
+            #search-bar {
+                width: 90%;
+                padding: 10px 15px;
+                font-size: 1.2rem;
+            }
+            .filters select {
+                width: 90%;
+                padding: 8px;
+                font-size: 0.9rem;
+                margin: 5px 0;
+            }
+            .confirmation-message {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+            .card {
+                width: 100%;
+                height: auto; /* Allow height to adjust on mobile */
+                padding: 15px;
+                flex: 1 1 100%; /* Full width on mobile */
+            }
+            .card-content h3 {
+                font-size: 1.5rem;
+            }
+            .card-content p {
+                font-size: 0.9rem;
+            }
+            footer {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            #search-bar {
+                font-size: 1rem;
+                padding: 8px 10px;
+            }
+            .filters select {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+            .card-content h3 {
+                font-size: 1.3rem;
+            }
+            .card-content p {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
