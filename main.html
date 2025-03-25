@@ -35,6 +35,7 @@
             align-items: center;
             background: #34495e;
             padding: 10px 20px;
+            flex-wrap: wrap; /* Allow wrapping for mobile */
         }
         .nav-links {
             display: flex;
@@ -119,6 +120,48 @@
             padding: 10px;
             background: #2a3b5a;
             color: #ecf0f1;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column; /* Stack nav items vertically */
+                align-items: center;
+                padding: 10px;
+            }
+            .nav-links {
+                flex-direction: column; /* Stack links vertically */
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            .auth-buttons {
+                flex-direction: row; /* Keep buttons in a row */
+                justify-content: center;
+                gap: 8px;
+                width: 100%; /* Ensure buttons take full width */
+                flex-wrap: wrap; /* Allow buttons to wrap if needed */
+            }
+            .auth-buttons button {
+                padding: 8px 15px; /* Reduce padding for mobile */
+                font-size: 12px; /* Reduce font size for mobile */
+                flex: 1; /* Make buttons take equal space */
+                max-width: 120px; /* Limit button width */
+            }
+            header h1 {
+                font-size: 2rem; /* Reduce header font size */
+            }
+            header p {
+                font-size: 1rem; /* Reduce subheader font size */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-buttons button {
+                padding: 6px 10px; /* Further reduce padding for very small screens */
+                font-size: 11px; /* Further reduce font size */
+                max-width: 100px; /* Further limit button width */
+            }
         }
     </style>
 </head>
