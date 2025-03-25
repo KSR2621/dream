@@ -38,6 +38,7 @@
             text-decoration: none;
             margin: 0 15px;
             font-size: 1.1rem;
+            display: inline-block; /* For better control on mobile */
         }
         nav a:hover {
             text-decoration: underline;
@@ -64,6 +65,9 @@
         }
         .filters select {
             width: 150px;
+        }
+        .filters input::placeholder {
+            color: #ccc;
         }
         .student-grid {
             display: grid;
@@ -116,6 +120,106 @@
             background-color: #2a3b5a;
             color: #fff;
             margin-top: 20px;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            header {
+                padding: 30px 15px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            nav {
+                padding: 10px;
+            }
+            nav a {
+                display: block; /* Stack links vertically */
+                margin: 10px 0;
+                font-size: 1rem;
+            }
+            .container {
+                padding: 15px;
+                margin: 10px auto;
+            }
+            .filters {
+                flex-direction: column; /* Stack filters vertically */
+                align-items: center;
+                gap: 10px;
+            }
+            .filters input, .filters select {
+                width: 90%; /* Make filters take full width */
+                max-width: 300px; /* Limit max width */
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+            .filters select {
+                width: 90%; /* Override the fixed width for select */
+                max-width: 300px;
+            }
+            .student-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 15px;
+            }
+            .student-card {
+                padding: 15px;
+            }
+            .student-card h3 {
+                font-size: 1.3rem;
+            }
+            .student-card p {
+                font-size: 0.85rem;
+            }
+            .details-button {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            .no-students {
+                font-size: 1rem;
+            }
+            footer {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 20px 10px;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            header p {
+                font-size: 0.9rem;
+            }
+            nav a {
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+            .filters input, .filters select {
+                padding: 6px;
+                font-size: 0.8rem;
+            }
+            .student-card h3 {
+                font-size: 1.2rem;
+            }
+            .student-card p {
+                font-size: 0.8rem;
+            }
+            .details-button {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            .no-students {
+                font-size: 0.9rem;
+            }
+            footer {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
