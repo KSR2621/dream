@@ -61,11 +61,19 @@
         h2, h3, h4 {
             color: #1abc9c;
         }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        h4 {
+            font-size: 1.3rem;
+        }
         .section {
             margin-bottom: 20px;
-        }
-        .section h3 {
-            margin-bottom: 10px;
         }
         .subsection {
             margin-bottom: 20px;
@@ -75,6 +83,7 @@
             padding: 10px;
             background-color: #3e5a74;
             border-radius: 5px;
+            font-size: 1rem;
         }
         .info-item strong {
             color: #1abc9c;
@@ -83,6 +92,7 @@
             color: #e74c3c;
             font-style: italic;
             margin-top: 10px;
+            font-size: 1rem;
         }
         /* Card styles for startup projects */
         .card-container {
@@ -109,6 +119,7 @@
         .card-content p {
             margin: 5px 0;
             line-height: 1.5;
+            font-size: 0.95rem;
         }
         .project-actions button {
             padding: 8px 15px;
@@ -139,6 +150,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 1rem;
         }
         .project-item span {
             font-weight: 600;
@@ -164,9 +176,172 @@
             text-align: center;
             padding: 20px;
             color: #1abc9c;
+            font-size: 1rem;
         }
         .error {
             color: #e74c3c;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column; /* Stack nav items vertically */
+                padding: 15px;
+            }
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            .nav-links a {
+                font-size: 1rem;
+            }
+            .auth-buttons button {
+                width: 100%; /* Full width for better tap target */
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            .profile-container {
+                max-width: 90%; /* Adjust width for mobile */
+                margin: 10px auto;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+            }
+            h4 {
+                font-size: 1.2rem;
+            }
+            .section {
+                margin-bottom: 15px;
+            }
+            .subsection {
+                margin-bottom: 15px;
+            }
+            .info-item {
+                padding: 8px;
+                font-size: 0.9rem;
+                margin: 8px 0;
+            }
+            .confirmation-status {
+                font-size: 0.9rem;
+                margin-top: 8px;
+            }
+            .card-container {
+                padding: 10px;
+                gap: 15px;
+            }
+            .card {
+                width: 100%; /* Full width on mobile */
+                padding: 15px;
+            }
+            .card-content h4 {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+            .card-content p {
+                font-size: 0.85rem;
+            }
+            .project-actions button {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+                margin: 4px;
+            }
+            .project-item {
+                padding: 10px;
+                margin-bottom: 8px;
+                font-size: 0.9rem;
+                flex-direction: column; /* Stack content and buttons vertically */
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .project-actions {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            .project-actions button {
+                flex: 1; /* Distribute space evenly */
+                margin: 0 5px;
+            }
+            .loading, .error {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 10px;
+            }
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+            .auth-buttons button {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+            .profile-container {
+                padding: 10px;
+            }
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+            }
+            h3 {
+                font-size: 1.2rem;
+                margin-bottom: 6px;
+            }
+            h4 {
+                font-size: 1.1rem;
+            }
+            .section {
+                margin-bottom: 10px;
+            }
+            .subsection {
+                margin-bottom: 10px;
+            }
+            .info-item {
+                padding: 6px;
+                font-size: 0.85rem;
+                margin: 6px 0;
+            }
+            .confirmation-status {
+                font-size: 0.85rem;
+                margin-top: 6px;
+            }
+            .card-container {
+                padding: 8px;
+                gap: 10px;
+            }
+            .card {
+                padding: 10px;
+            }
+            .card-content h4 {
+                font-size: 1.3rem;
+                margin-bottom: 6px;
+            }
+            .card-content p {
+                font-size: 0.8rem;
+            }
+            .project-actions button {
+                padding: 5px 10px;
+                font-size: 0.85rem;
+            }
+            .project-item {
+                padding: 8px;
+                font-size: 0.85rem;
+                gap: 8px;
+            }
+            .loading, .error {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
