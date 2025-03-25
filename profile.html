@@ -5,65 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Student-Startup Connect</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: #2c3e50;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
             color: #ecf0f1;
+            min-height: 100vh;
         }
         nav {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            background: #34495e;
-            padding: 10px 20px;
+            background: linear-gradient(90deg, #34495e 0%, #2c3e50 100%);
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1abc9c;
+            margin-bottom: 10px;
         }
         .nav-links {
             display: flex;
-            justify-content: center;
-            flex-grow: 1;
-            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         .nav-links a {
             color: #ecf0f1;
             text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
         }
-        .nav-links a:hover {
-            color: #1abc9c;
+        .nav-links a:hover, .nav-links a:active {
+            background-color: #1abc9c;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .auth-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
         .auth-buttons button {
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            background-color: #ecf0f1;
-            color: #333;
-            border: none;
-        }
-        .auth-buttons button:hover {
-            background-color: #e74c3c;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
             color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+        .auth-buttons button:hover, .auth-buttons button:active {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
         .profile-container {
-            max-width: 800px;
+            max-width: 90%;
             margin: 20px auto;
-            background-color: #34495e;
+            background: linear-gradient(145deg, #34495e, #2c3e50);
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
         }
-        h2, h3, h4 {
-            color: #1abc9c;
+        .profile-container:hover {
+            transform: translateY(-5px);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
         }
         h2 {
             font-size: 2rem;
-            margin-bottom: 15px;
+            margin: 0;
+            background: linear-gradient(90deg, #1abc9c, #16a085);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, #1abc9c, #16a085) 1;
+            padding-bottom: 10px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .edit-profile-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #1abc9c, #16a085);
+            color: #fff;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .edit-profile-btn:hover, .edit-profile-btn:active {
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
+        }
+        h3, h4 {
+            color: #1abc9c;
+            margin: 0;
         }
         h3 {
             font-size: 1.5rem;
@@ -71,276 +136,387 @@
         }
         h4 {
             font-size: 1.3rem;
+            margin-bottom: 10px;
         }
         .section {
             margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
         .subsection {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .info-item {
-            margin: 10px 0;
+            margin: 8px 0;
             padding: 10px;
             background-color: #3e5a74;
-            border-radius: 5px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+        .info-item:hover {
+            transform: translateX(5px);
+        }
+        .info-item i {
+            color: #1abc9c;
+            font-size: 1.1rem;
         }
         .info-item strong {
             color: #1abc9c;
+            font-weight: 600;
         }
         .confirmation-status {
             color: #e74c3c;
             font-style: italic;
-            margin-top: 10px;
-            font-size: 1rem;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 10px;
+            border-radius: 5px;
         }
-        /* Card styles for startup projects */
         .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 10px;
         }
         .card {
-            background: #34495e;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(145deg, #3e5a74, #34495e);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             color: #ecf0f1;
             text-align: left;
-            width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
         .card-content h4 {
-            font-size: 1.8rem;
-            margin: 0 0 10px;
+            font-size: 1.4rem;
+            margin: 0 0 8px;
             color: #1abc9c;
         }
         .card-content p {
-            margin: 5px 0;
-            line-height: 1.5;
-            font-size: 0.95rem;
+            margin: 8px 0;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            color: #d1d8e0;
+        }
+        .project-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
         }
         .project-actions button {
-            padding: 8px 15px;
-            margin: 5px;
+            padding: 8px 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
         }
         .delete-project {
-            background-color: #e74c3c;
-            color: #ecf0f1;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: #fff;
+        }
+        .delete-project:hover, .delete-project:active {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
         .delete-project:disabled {
-            background-color: #c0392b;
+            background: #c0392b;
             cursor: not-allowed;
+            opacity: 0.6;
         }
-        /* Styles for student project lists */
         .project-list {
             list-style: none;
             padding: 0;
         }
         .project-item {
-            background-color: #3e5a74;
-            padding: 15px;
+            background: linear-gradient(145deg, #3e5a74, #34495e);
+            padding: 12px;
             margin-bottom: 10px;
-            border-radius: 5px;
+            border-radius: 8px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+        .project-item:hover {
+            transform: translateY(-3px);
         }
         .project-item span {
             font-weight: 600;
             color: #1abc9c;
         }
+        .project-item i {
+            margin-right: 8px;
+            color: #1abc9c;
+        }
+        .project-done, .project-remaining, .project-accept, .project-reject {
+            padding: 8px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
         .project-done {
-            background-color: #2ecc71;
-            color: #1a2a44;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            color: #fff;
+        }
+        .project-done:hover, .project-done:active {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
         }
         .project-remaining {
-            background-color: #f39c12;
-            color: #1a2a44;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            color: #fff;
+        }
+        .project-remaining:hover, .project-remaining:active {
+            background: linear-gradient(90deg, #e67e22, #f39c12);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
         }
         .project-accept {
-            background-color: #1abc9c;
-            color: #1a2a44;
+            background: linear-gradient(90deg, #1abc9c, #16a085);
+            color: #fff;
+        }
+        .project-accept:hover, .project-accept:active {
+            background: linear-gradient(90deg, #16a085, #1abc9c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
         }
         .project-reject {
-            background-color: #e74c3c;
-            color: #ecf0f1;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            color: #fff;
+        }
+        .project-reject:hover, .project-reject:active {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        .project-actions {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
         }
         .loading, .error {
             text-align: center;
-            padding: 20px;
+            padding: 15px;
+            font-size: 0.95rem;
+            border-radius: 8px;
+        }
+        .loading {
             color: #1abc9c;
-            font-size: 1rem;
+            background: rgba(26, 188, 156, 0.1);
         }
         .error {
             color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
         }
 
-        /* Media Query for Mobile Devices */
-        @media (max-width: 768px) {
+        /* Animation for fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 769px) {
             nav {
-                flex-direction: column; /* Stack nav items vertically */
-                padding: 15px;
+                flex-direction: row;
+                padding: 15px 30px;
+            }
+            .nav-logo {
+                margin-bottom: 0;
             }
             .nav-links {
-                flex-direction: column;
-                gap: 10px;
-                margin-bottom: 15px;
+                flex-direction: row;
+                gap: 20px;
+                margin-bottom: 0;
             }
             .nav-links a {
-                font-size: 1rem;
+                font-size: 1.1rem;
+                width: auto;
+            }
+            .auth-buttons {
+                width: auto;
             }
             .auth-buttons button {
-                width: 100%; /* Full width for better tap target */
+                width: auto;
+                max-width: none;
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            .profile-container {
+                max-width: 900px;
+                margin: 30px auto;
+                padding: 30px;
+            }
+            h2 {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+            .edit-profile-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+            h3 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            h4 {
+                font-size: 1.5rem;
+            }
+            .section {
+                margin-bottom: 30px;
+                padding: 20px;
+            }
+            .subsection {
+                margin-bottom: 20px;
+            }
+            .info-item {
+                margin: 10px 0;
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            .confirmation-status {
+                font-size: 1rem;
+                margin-top: 10px;
+            }
+            .card-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                padding: 20px;
+            }
+            .card {
+                padding: 20px;
+            }
+            .card-content h4 {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+            }
+            .card-content p {
+                font-size: 0.95rem;
+            }
+            .project-actions button {
                 padding: 8px 15px;
                 font-size: 0.9rem;
             }
-            .profile-container {
-                max-width: 90%; /* Adjust width for mobile */
-                margin: 10px auto;
-                padding: 15px;
-            }
-            h2 {
-                font-size: 1.5rem;
-                margin-bottom: 10px;
-            }
-            h3 {
-                font-size: 1.3rem;
-                margin-bottom: 8px;
-            }
-            h4 {
-                font-size: 1.2rem;
-            }
-            .section {
-                margin-bottom: 15px;
-            }
-            .subsection {
-                margin-bottom: 15px;
-            }
-            .info-item {
-                padding: 8px;
-                font-size: 0.9rem;
-                margin: 8px 0;
-            }
-            .confirmation-status {
-                font-size: 0.9rem;
-                margin-top: 8px;
-            }
-            .card-container {
-                padding: 10px;
-                gap: 15px;
-            }
-            .card {
-                width: 100%; /* Full width on mobile */
-                padding: 15px;
-            }
-            .card-content h4 {
-                font-size: 1.5rem;
-                margin-bottom: 8px;
-            }
-            .card-content p {
-                font-size: 0.85rem;
-            }
-            .project-actions button {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-                margin: 4px;
-            }
             .project-item {
-                padding: 10px;
-                margin-bottom: 8px;
-                font-size: 0.9rem;
-                flex-direction: column; /* Stack content and buttons vertically */
-                align-items: flex-start;
-                gap: 10px;
+                padding: 15px;
+                margin-bottom: 15px;
+                font-size: 1rem;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0;
             }
             .project-actions {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
+                width: auto;
+                gap: 10px;
             }
             .project-actions button {
-                flex: 1; /* Distribute space evenly */
-                margin: 0 5px;
+                flex: none;
+                padding: 8px 15px;
+                font-size: 0.9rem;
             }
             .loading, .error {
-                padding: 15px;
-                font-size: 0.9rem;
+                padding: 20px;
+                font-size: 1.1rem;
             }
         }
 
         @media (max-width: 480px) {
-            nav {
-                padding: 10px;
+            .nav-logo {
+                font-size: 1.3rem;
             }
             .nav-links a {
                 font-size: 0.9rem;
+                padding: 8px;
             }
             .auth-buttons button {
-                padding: 6px 12px;
-                font-size: 0.85rem;
+                padding: 8px;
+                font-size: 0.9rem;
             }
             .profile-container {
-                padding: 10px;
+                padding: 15px;
             }
             h2 {
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+            }
+            .edit-profile-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            h3 {
                 font-size: 1.3rem;
                 margin-bottom: 8px;
             }
-            h3 {
-                font-size: 1.2rem;
-                margin-bottom: 6px;
-            }
             h4 {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
             .section {
-                margin-bottom: 10px;
+                margin-bottom: 15px;
+                padding: 10px;
             }
             .subsection {
                 margin-bottom: 10px;
             }
             .info-item {
-                padding: 6px;
-                font-size: 0.85rem;
+                padding: 8px;
+                font-size: 0.9rem;
                 margin: 6px 0;
             }
             .confirmation-status {
                 font-size: 0.85rem;
                 margin-top: 6px;
             }
-            .card-container {
-                padding: 8px;
-                gap: 10px;
-            }
             .card {
-                padding: 10px;
+                padding: 12px;
             }
             .card-content h4 {
                 font-size: 1.3rem;
                 margin-bottom: 6px;
             }
             .card-content p {
-                font-size: 0.8rem;
-            }
-            .project-actions button {
-                padding: 5px 10px;
                 font-size: 0.85rem;
             }
+            .project-actions button {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
             .project-item {
-                padding: 8px;
+                padding: 10px;
                 font-size: 0.85rem;
                 gap: 8px;
             }
             .loading, .error {
                 padding: 10px;
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -348,6 +524,7 @@
 <body>
     <!-- Navigation Bar -->
     <nav>
+        <div class="nav-logo">Student-Startup Connect</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="available-projects.html">Available Projects</a>
@@ -360,7 +537,10 @@
     </nav>
 
     <div class="profile-container">
-        <h2>Profile</h2>
+        <div class="profile-header">
+            <h2>Profile</h2>
+            <button class="edit-profile-btn" id="editProfileBtn">Edit Profile</button>
+        </div>
 
         <!-- Personal/Company Information -->
         <div class="section" id="personalInfo">
@@ -460,9 +640,7 @@
                     }
 
                     const userData = snapshot.val();
-                    // Fetch the latest confirmation status from the database
                     const isConfirmed = userData.confirmed === true;
-                    // Update localStorage with the latest confirmation status
                     localStorage.setItem('isConfirmed', isConfirmed.toString());
 
                     console.log("User data loaded:", { userData, isConfirmed });
@@ -471,29 +649,26 @@
                     const infoDetails = document.getElementById('infoDetails');
 
                     if (userType === 'student') {
-                        // Display student information
                         infoTitle.textContent = "Personal Information";
                         infoDetails.innerHTML = `
-                            <div class="info-item"><strong>First Name:</strong> ${userData.firstName || 'Not provided'}</div>
-                            <div class="info-item"><strong>Last Name:</strong> ${userData.lastName || 'Not provided'}</div>
-                            <div class="info-item"><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
-                            <div class="info-item"><strong>Skills:</strong> ${userData.skills ? userData.skills.join(', ') : 'Not provided'}</div>
-                            <div class="info-item"><strong>Education:</strong> ${userData.education || 'Not provided'}</div>
-                            <div class="info-item"><strong>Portfolio:</strong> ${userData.portfolio ? `<a href="${userData.portfolio}" target="_blank">${userData.portfolio}</a>` : 'Not provided'}</div>
-                            <div class="info-item"><strong>Confirmation Status:</strong> ${isConfirmed ? 'Confirmed' : 'Unconfirmed'}</div>
+                            <div class="info-item"><i class="fas fa-user"></i><strong>First Name:</strong> ${userData.firstName || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-user"></i><strong>Last Name:</strong> ${userData.lastName || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-envelope"></i><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-tools"></i><strong>Skills:</strong> ${userData.skills ? userData.skills.join(', ') : 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-graduation-cap"></i><strong>Education:</strong> ${userData.education || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-link"></i><strong>Portfolio:</strong> ${userData.portfolio ? `<a href="${userData.portfolio}" target="_blank">${userData.portfolio}</a>` : 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-check-circle"></i><strong>Confirmation Status:</strong> ${isConfirmed ? 'Confirmed' : 'Unconfirmed'}</div>
                             ${!isConfirmed ? '<p class="confirmation-status">Note: You cannot apply to projects until your profile is confirmed by the host.</p>' : ''}
                         `;
 
-                        // Show student-specific sections
                         document.getElementById('pastProjects').style.display = 'block';
                         document.getElementById('currentProjects').style.display = 'block';
                         document.getElementById('appliedProjects').style.display = 'block';
 
-                        // Load past projects with Remaining button (visible for 36 hours)
                         const pastProjectsRef = ref(database, `users/${userId}/pastProjects`);
                         get(pastProjectsRef).then(async (snapshot) => {
                             const pastProjectsList = document.getElementById('pastProjectsList');
-                            pastProjectsList.innerHTML = ''; // Clear existing content
+                            pastProjectsList.innerHTML = '';
                             if (snapshot.exists()) {
                                 const projects = snapshot.val();
                                 if (Object.keys(projects).length > 0) {
@@ -523,34 +698,28 @@
                                         }
                                         li.innerHTML = `
                                             <div>
+                                                <i class="fas fa-history"></i>
                                                 <span>${project.title}</span> - ${project.description}
                                             </div>
                                             ${buttonHtml}
                                         `;
                                         pastProjectsList.appendChild(li);
 
-                                        // Handle Remaining button for past projects
                                         const remainingButton = li.querySelector('.project-remaining');
                                         if (remainingButton) {
                                             remainingButton.addEventListener('click', async () => {
                                                 try {
-                                                    // Update project status to Open
                                                     const projectRef = ref(database, `projects/${projectId}`);
                                                     await update(projectRef, { 
                                                         status: 'Open',
-                                                        completedTimestamp: null // Reset the timestamp
+                                                        completedTimestamp: null
                                                     });
-                                                    console.log(`Project ${projectId} status updated to Open`);
-
-                                                    // Move project back to currentProjects
                                                     const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
                                                     await set(currentProjectRef, {
                                                         title: project.title,
                                                         description: project.description,
-                                                        studentAccepted: true // Mark as accepted by student
+                                                        studentAccepted: true
                                                     });
-
-                                                    // Recreate the application with status: Accepted
                                                     const applicationsRef = ref(database, `applications`);
                                                     const newAppRef = push(applicationsRef);
                                                     await set(newAppRef, {
@@ -566,13 +735,8 @@
                                                         status: 'Accepted',
                                                         timestamp: Date.now()
                                                     });
-                                                    console.log(`Recreated application for project ${projectId} with status Accepted`);
-
-                                                    // Remove from pastProjects
                                                     const pastProjectRef = ref(database, `users/${userId}/pastProjects/${projectId}`);
                                                     await remove(pastProjectRef);
-                                                    console.log(`Moved project ${projectId} back to current projects for student ${userId}`);
-
                                                     alert('Project moved back to current projects!');
                                                     window.location.reload();
                                                 } catch (error) {
@@ -593,11 +757,10 @@
                             document.getElementById('pastProjectsList').innerHTML = '<li class="error">Error loading past projects: ' + error.message + '</li>';
                         });
 
-                        // Load current projects with Accept/Reject or Done button
                         const currentProjectsRef = ref(database, `users/${userId}/currentProjects`);
                         get(currentProjectsRef).then((snapshot) => {
                             const currentProjectsList = document.getElementById('currentProjectsList');
-                            currentProjectsList.innerHTML = ''; // Clear existing content
+                            currentProjectsList.innerHTML = '';
                             if (snapshot.exists()) {
                                 const projects = snapshot.val();
                                 if (Object.keys(projects).length > 0) {
@@ -607,14 +770,12 @@
                                         li.className = 'project-item';
                                         let buttonHtml = '';
                                         if (project.studentAccepted) {
-                                            // Show only Done button if student has accepted
                                             buttonHtml = `
                                                 <div class="project-actions">
                                                     <button class="project-done" data-project-id="${projectId}">Done</button>
                                                 </div>
                                             `;
                                         } else {
-                                            // Show Accept and Reject buttons if not yet accepted
                                             buttonHtml = `
                                                 <div class="project-actions">
                                                     <button class="project-accept" data-project-id="${projectId}">Accept</button>
@@ -624,38 +785,29 @@
                                         }
                                         li.innerHTML = `
                                             <div>
+                                                <i class="fas fa-tasks"></i>
                                                 <span>${project.title}</span> - ${project.description}
                                             </div>
                                             ${buttonHtml}
                                         `;
                                         currentProjectsList.appendChild(li);
 
-                                        // Handle Done button
                                         const doneButton = li.querySelector('.project-done');
                                         if (doneButton) {
                                             doneButton.addEventListener('click', async () => {
                                                 try {
-                                                    // Update project status to Completed
                                                     const projectRef = ref(database, `projects/${projectId}`);
                                                     await update(projectRef, { 
                                                         status: 'Completed',
-                                                        completedTimestamp: Date.now() // Store the completion timestamp
+                                                        completedTimestamp: Date.now()
                                                     });
-                                                    console.log(`Project ${projectId} status updated to Completed`);
-
-                                                    // Move project to pastProjects
                                                     const pastProjectRef = ref(database, `users/${userId}/pastProjects/${projectId}`);
                                                     await set(pastProjectRef, {
                                                         title: project.title,
                                                         description: project.description
                                                     });
-
-                                                    // Remove from currentProjects
                                                     const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
                                                     await remove(currentProjectRef);
-                                                    console.log(`Moved project ${projectId} to past projects for student ${userId}`);
-
-                                                    // Remove associated applications
                                                     const applicationsRef = ref(database, `applications`);
                                                     const snapshot = await get(applicationsRef);
                                                     if (snapshot.exists()) {
@@ -664,10 +816,8 @@
                                                             app.projectId === projectId && app.studentId === userId);
                                                         for (const [appId, _] of projectApps) {
                                                             await remove(ref(database, `applications/${appId}`));
-                                                            console.log(`Removed application ${appId} for project ${projectId}`);
                                                         }
                                                     }
-
                                                     alert('Project marked as completed!');
                                                     window.location.reload();
                                                 } catch (error) {
@@ -677,16 +827,12 @@
                                             });
                                         }
 
-                                        // Handle Accept button
                                         const acceptButton = li.querySelector('.project-accept');
                                         if (acceptButton) {
                                             acceptButton.addEventListener('click', async () => {
                                                 try {
-                                                    // Mark the project as accepted by the student
                                                     const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
                                                     await update(currentProjectRef, { studentAccepted: true });
-                                                    console.log(`Student ${userId} accepted project ${projectId}, studentAccepted set to true`);
-
                                                     alert('Project accepted!');
                                                     window.location.reload();
                                                 } catch (error) {
@@ -696,12 +842,10 @@
                                             });
                                         }
 
-                                        // Handle Reject button
                                         const rejectButton = li.querySelector('.project-reject');
                                         if (rejectButton) {
                                             rejectButton.addEventListener('click', async () => {
                                                 try {
-                                                    // Unconfirm the application
                                                     const applicationsRef = ref(database, `applications`);
                                                     const snapshot = await get(applicationsRef);
                                                     if (snapshot.exists()) {
@@ -710,15 +854,10 @@
                                                             app.projectId === projectId && app.studentId === userId && app.status === 'Accepted');
                                                         for (const [appId, _] of projectApps) {
                                                             await update(ref(database, `applications/${appId}`), { status: 'Pending' });
-                                                            console.log(`Unconfirmed application ${appId} for project ${projectId}`);
                                                         }
                                                     }
-
-                                                    // Remove from currentProjects
                                                     const currentProjectRef = ref(database, `users/${userId}/currentProjects/${projectId}`);
                                                     await remove(currentProjectRef);
-                                                    console.log(`Removed project ${projectId} from student ${userId}'s current projects`);
-
                                                     alert('Project rejected!');
                                                     window.location.reload();
                                                 } catch (error) {
@@ -739,22 +878,19 @@
                             document.getElementById('currentProjectsList').innerHTML = '<li class="error">Error loading current projects: ' + error.message + '</li>';
                         });
 
-                        // Load applied projects (exclude completed projects)
                         const applicationsRef = ref(database, `applications`);
                         get(applicationsRef).then(async (snapshot) => {
                             const appliedProjectsList = document.getElementById('appliedProjectsList');
-                            appliedProjectsList.innerHTML = ''; // Clear existing content
+                            appliedProjectsList.innerHTML = '';
                             if (snapshot.exists()) {
                                 const applications = snapshot.val();
                                 const userApplications = Object.values(applications).filter(app => app.studentId === userId);
                                 if (userApplications.length > 0) {
-                                    // Fetch project details for each application
                                     const projectPromises = userApplications.map(async (app) => {
                                         const projectRef = ref(database, `projects/${app.projectId}`);
                                         const projectSnapshot = await get(projectRef);
                                         if (projectSnapshot.exists()) {
                                             const project = projectSnapshot.val();
-                                            // Exclude completed projects
                                             if (project.status !== 'Completed') {
                                                 return { project, status: app.status };
                                             }
@@ -769,7 +905,12 @@
                                         validProjects.forEach(({ project, status }) => {
                                             const li = document.createElement('li');
                                             li.className = 'project-item';
-                                            li.innerHTML = `<span>${project.projectTitle}</span> - ${project.description} (Status: ${status})`;
+                                            li.innerHTML = `
+                                                <div>
+                                                    <i class="fas fa-file-alt"></i>
+                                                    <span>${project.projectTitle}</span> - ${project.description} (Status: ${status})
+                                                </div>
+                                            `;
                                             appliedProjectsList.appendChild(li);
                                         });
                                     } else {
@@ -787,21 +928,18 @@
                         });
 
                     } else if (userType === 'startup') {
-                        // Display startup information
                         infoTitle.textContent = "Company Details";
                         infoDetails.innerHTML = `
-                            <div class="info-item"><strong>Company Name:</strong> ${userData.companyName || 'Not provided'}</div>
-                            <div class="info-item"><strong>Description:</strong> ${userData.companyDescription || 'Not provided'}</div>
-                            <div class="info-item"><strong>Industry:</strong> ${userData.industry || 'Not provided'}</div>
-                            <div class="info-item"><strong>Website:</strong> ${userData.website ? `<a href="${userData.website}" target="_blank">${userData.website}</a>` : 'Not provided'}</div>
-                            <div class="info-item"><strong>Location:</strong> ${userData.location || 'Not provided'}</div>
-                            <div class="info-item"><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-building"></i><strong>Company Name:</strong> ${userData.companyName || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-info-circle"></i><strong>Description:</strong> ${userData.companyDescription || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-industry"></i><strong>Industry:</strong> ${userData.industry || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-globe"></i><strong>Website:</strong> ${userData.website ? `<a href="${userData.website}" target="_blank">${userData.website}</a>` : 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-map-marker-alt"></i><strong>Location:</strong> ${userData.location || 'Not provided'}</div>
+                            <div class="info-item"><i class="fas fa-envelope"></i><strong>Email:</strong> ${userData.email || 'Not provided'}</div>
                         `;
 
-                        // Show startup-specific sections
                         document.getElementById('uploadedProjects').style.display = 'block';
 
-                        // Load uploaded projects and categorize them
                         const projectsRef = ref(database, 'projects');
                         const applicationsRef = ref(database, 'applications');
 
@@ -813,37 +951,29 @@
                             const inProgressProjectsList = document.getElementById('inProgressProjectsList');
                             const doneProjectsList = document.getElementById('doneProjectsList');
 
-                            confirmedProjectsList.innerHTML = ''; // Clear existing content
+                            confirmedProjectsList.innerHTML = '';
                             inProgressProjectsList.innerHTML = '';
                             doneProjectsList.innerHTML = '';
 
                             let allProjects = {};
                             let allApplications = {};
 
-                            // Fetch projects
                             if (projectsSnapshot.exists()) {
                                 allProjects = projectsSnapshot.val();
-                                console.log("Fetched projects:", allProjects);
                             } else {
-                                console.log("No projects found in Firebase.");
                                 confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
                                 inProgressProjectsList.innerHTML = '<p>No in-progress projects available.</p>';
                                 doneProjectsList.innerHTML = '<p>No completed projects available.</p>';
                                 return;
                             }
 
-                            // Fetch applications
                             if (applicationsSnapshot.exists()) {
                                 allApplications = applicationsSnapshot.val();
-                                console.log("Fetched applications:", allApplications);
                             } else {
-                                console.log("No applications found in Firebase.");
                                 allApplications = {};
                             }
 
-                            // Filter projects posted by this startup
                             const userProjects = Object.entries(allProjects).filter(([_, project]) => project.postedBy === userId);
-                            console.log("User projects:", userProjects);
 
                             if (userProjects.length === 0) {
                                 confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
@@ -852,59 +982,45 @@
                                 return;
                             }
 
-                            // Categorize projects
                             const confirmedProjects = [];
                             const inProgressProjects = [];
                             const doneProjects = [];
 
                             for (const [projectId, project] of userProjects) {
-                                console.log(`Processing project ${projectId}:`, project);
                                 if (project.status === 'Completed') {
                                     doneProjects.push([projectId, project]);
-                                    console.log(`Project ${projectId} categorized as Done`);
                                 } else if (project.status === 'In Progress') {
                                     inProgressProjects.push([projectId, project]);
-                                    console.log(`Project ${projectId} categorized as In Progress (status-based)`);
                                 } else {
                                     const isAccepted = await hasAcceptedApplications(projectId, allApplications);
                                     if (isAccepted) {
                                         inProgressProjects.push([projectId, project]);
-                                        console.log(`Project ${projectId} categorized as In Progress (application-based)`);
                                     } else if (project.confirmed === true && project.status === 'Open') {
                                         confirmedProjects.push([projectId, project]);
-                                        console.log(`Project ${projectId} categorized as Confirmed`);
-                                    } else {
-                                        console.log(`Project ${projectId} does not fit any category:`, project);
                                     }
                                 }
                             }
 
-                            // Render Confirmed Projects
                             if (confirmedProjects.length === 0) {
                                 confirmedProjectsList.innerHTML = '<p>No confirmed projects available.</p>';
                             } else {
                                 confirmedProjects.forEach(([projectId, project]) => {
-                                    console.log(`Rendering Confirmed project ${projectId}`);
                                     renderProjectCard(projectId, project, confirmedProjectsList, 'Confirmed');
                                 });
                             }
 
-                            // Render In Progress Projects
                             if (inProgressProjects.length === 0) {
                                 inProgressProjectsList.innerHTML = '<p>No in-progress projects available.</p>';
                             } else {
                                 inProgressProjects.forEach(([projectId, project]) => {
-                                    console.log(`Rendering In Progress project ${projectId}`);
                                     renderProjectCard(projectId, project, inProgressProjectsList, 'In Progress');
                                 });
                             }
 
-                            // Render Done Projects
                             if (doneProjects.length === 0) {
                                 doneProjectsList.innerHTML = '<p>No completed projects available.</p>';
                             } else {
                                 doneProjects.forEach(([projectId, project]) => {
-                                    console.log(`Rendering Done project ${projectId}`);
                                     renderProjectCard(projectId, project, doneProjectsList, 'Done');
                                 });
                             }
@@ -921,46 +1037,37 @@
                     console.error('Error loading profile:', error);
                     document.getElementById('infoDetails').innerHTML = '<div class="error">Error loading profile data: ' + error.message + '</div>';
                 });
+
+                // Handle Edit Profile button click
+                document.getElementById('editProfileBtn').addEventListener('click', () => {
+                    window.location.href = 'student-form.html';
+                });
             });
 
-            // Function to check if a project has accepted applications and the student has accepted
             async function hasAcceptedApplications(projectId, applications) {
                 if (!applications || Object.keys(applications).length === 0) {
-                    console.log(`No applications available to check for project ${projectId}`);
                     return false;
                 }
 
                 const projectApps = Object.values(applications).filter(app => app.projectId === projectId && app.status === 'Accepted');
-                console.log(`Project ${projectId} applications with status Accepted:`, projectApps);
-
                 if (projectApps.length === 0) {
-                    console.log(`Project ${projectId} has no accepted applications`);
                     return false;
                 }
 
-                // Check if the student has accepted the project
                 for (const app of projectApps) {
                     const studentProjectRef = ref(database, `users/${app.studentId}/currentProjects/${projectId}`);
                     const snapshot = await get(studentProjectRef);
                     if (snapshot.exists()) {
                         const projectData = snapshot.val();
-                        console.log(`Project ${projectId} data for student ${app.studentId}:`, projectData);
                         if (projectData.studentAccepted === true) {
-                            console.log(`Project ${projectId} is accepted by student ${app.studentId}, marking as In Progress`);
                             return true;
-                        } else {
-                            console.log(`Project ${projectId} is not yet accepted by student ${app.studentId}`);
                         }
-                    } else {
-                        console.log(`Project ${projectId} not found in student ${app.studentId}'s current projects`);
                     }
                 }
                 return false;
             }
 
-            // Function to render a project card
             function renderProjectCard(projectId, project, container, status) {
-                console.log(`Rendering project card for project ${projectId} with status ${status}`, project);
                 const projectCard = document.createElement('div');
                 projectCard.className = 'card';
                 projectCard.innerHTML = `
@@ -982,17 +1089,11 @@
                 if (deleteProjectButton) {
                     deleteProjectButton.disabled = false;
 
-                    // Handle delete project
                     deleteProjectButton.addEventListener('click', async (e) => {
                         e.stopPropagation();
-                        console.log(`Delete project button clicked for project ${projectId}`);
                         if (confirm('Are you sure you want to delete this project? This will also delete all associated applications.')) {
                             try {
-                                // Delete the project
                                 await remove(ref(database, `projects/${projectId}`));
-                                console.log(`Project ${projectId} deleted successfully`);
-
-                                // Delete associated applications
                                 const applicationsRef = ref(database, `applications`);
                                 const snapshot = await get(applicationsRef);
                                 if (snapshot.exists()) {
@@ -1000,11 +1101,8 @@
                                     const projectApps = Object.entries(applications).filter(([_, app]) => app.projectId === projectId);
                                     for (const [appId, _] of projectApps) {
                                         await remove(ref(database, `applications/${appId}`));
-                                        console.log(`Application ${appId} deleted successfully`);
                                     }
                                 }
-
-                                // Remove project from students' current projects
                                 const applicationsSnapshot = await get(applicationsRef);
                                 let studentsWithProject = [];
                                 if (applicationsSnapshot.exists()) {
@@ -1015,9 +1113,7 @@
                                 }
                                 for (const studentId of studentsWithProject) {
                                     await remove(ref(database, `users/${studentId}/currentProjects/${projectId}`));
-                                    console.log(`Removed project ${projectId} from student ${studentId}'s current projects`);
                                 }
-
                                 alert('Project deleted successfully!');
                                 window.location.reload();
                             } catch (error) {
@@ -1026,14 +1122,11 @@
                             }
                         }
                     });
-                } else {
-                    console.error(`Delete button not found for project ${projectId}`);
                 }
 
                 container.appendChild(projectCard);
             }
 
-            // Handle Logout
             document.getElementById('logoutBtn').addEventListener('click', async () => {
                 try {
                     await signOut(auth);
